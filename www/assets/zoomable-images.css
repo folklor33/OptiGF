@@ -1,0 +1,84 @@
+
+/* Style pour les images zoomables */
+.zoomable-image {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.zoomable-image:hover {
+    transform: scale(1.05);
+}
+
+/* Modal pour l'image agrandie */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.699);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 83vw;
+    max-height: 93vh;
+    object-fit: contain;
+    animation: zoom 0.3s;
+    width: fit-content;
+    height: fit-content;
+}
+
+@keyframes zoom {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.close-modal {
+    position: fixed;
+    top: 20px;
+    right: 40px;
+    color: #f1f1f1;
+    font-size: 50px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+    z-index: 100000;
+    line-height: 1;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: #ff4444;
+}
+
+#caption {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #f1f1f1;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Empêcher le scroll du body quand la modale est ouverte */
+body.modal-open {
+    overflow: hidden;
+}

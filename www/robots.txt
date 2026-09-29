@@ -1,0 +1,21 @@
+﻿User-agent: *
+Allow: /
+
+# Pages indexables
+Allow: /index.php
+Allow: /injection.php
+Allow: /settings.php
+
+Allow: /assets/
+
+Allow: /sitemap.xml
+
+# Bloquer fichiers techniques
+Disallow: /api/
+Disallow: /managers/
+Disallow: /_*.php
+Disallow: /ui_creator.php
+Disallow: /errors.php
+
+# Sitemap
+sitemap: https://optigf.eu/sitemap.xml

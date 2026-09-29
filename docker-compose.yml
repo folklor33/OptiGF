@@ -1,0 +1,143 @@
+---
+services:
+  ##################################### OPTIGF #####################################
+  optigf:
+    build: . # => ./Dockerfile
+    container_name: optigf-web
+
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 512M
+
+    environment:
+      TZ: Europe/Paris
+      PUID: 1000 # si modif ici, modifier aussi Dockerfile
+      PGID: 100 # si modif ici, modifier aussi Dockerfile
+      PHP_MEMORY_LIMIT: 256M
+      PHP_MAX_EXECUTION_TIME: 30
+      PHP_POST_MAX_SIZE: 20M
+      PHP_UPLOAD_MAX_FILESIZE: 20M
+
+    ports: # optionnel si reverse proxy interne
+      - 8080:80
+
+    volumes: # volumes montés
+      - /path/to/optigf/logs:/var/log/apache2/
+      - /path/to/optigf/www:/var/www/html
+      - /path/to/optigf/php-config:/usr/local/etc/php/conf.d
+
+    restart: unless-stopped
+    networks:
+      - optigf_network
+
+
+
+  ################################### PHP MY ADMIN ###################################
+
+  optigf-phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: optigf-pma
+
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 512M
+
+    environment:
+      TZ: Europe/Paris
+      PMA_HOST: "optigf-mariadb"
+    ports:
+      - 8081:80
+
+    depends_on: # dépendance DB
+      - optigf-mariadb
+
+    restart: unless-stopped
+    networks: # réseau partagé
+      - optigf_network
+
+
+
+  ##################################### MARIA DB #####################################
+  optigf-mariadb:
+    image: ghcr.io/linuxserver/mariadb:latest
+    container_name: optigf-mariadb
+
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 512M
+
+    environment:
+      TZ: Europe/Paris
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+    volumes: # volume nommé
+      - optigf_mysql_data:/config
+
+    restart: unless-stopped
+    networks: # réseau partagé
+      - optigf_network
+
+
+
+  ##################################### DISCORD BOT #####################################
+
+  optigf-discord:
+    build: ./discord-bot  # Dossier contenant le Dockerfile du bot
+    container_name: optigf-discord
+
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 128M
+
+    environment:
+      TZ: Europe/Paris
+      PUID: 1000 # si modif ici, modifier aussi Dockerfile
+      PGID: 100 # si modif ici, modifier aussi Dockerfile
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      DISCORD_ADMIN_ROLE: ${DISCORD_ADMIN_ROLE}
+      DISCORD_INJECTION_ROLE: ${DISCORD_INJECTION_ROLE}
+      DISCORD_REGISTER_CHANNEL_ID: ${DISCORD_REGISTER_CHANNEL_ID}
+      DISCORD_HISTORY_CHANNEL_ID: ${DISCORD_HISTORY_CHANNEL_ID}
+      DISCORD_LEAVE_GUILD_ID_1: ${DISCORD_LEAVE_GUILD_ID_1}
+      DISCORD_LEAVE_CHANNEL_ID_1: ${DISCORD_LEAVE_CHANNEL_ID_1}
+      DISCORD_LEAVE_GUILD_ID_2: ${DISCORD_LEAVE_GUILD_ID_2}
+      DISCORD_LEAVE_CHANNEL_ID_2: ${DISCORD_LEAVE_CHANNEL_ID_2}
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE}
+
+    volumes: # volume monté
+      - /path/to/optigf/discord-bot/src:/usr/src/app/src
+
+    depends_on: # dépendance DB
+      - optigf-mariadb
+ 
+    restart: unless-stopped
+    networks: # réseau partagé
+      - optigf_network
+
+volumes:
+  optigf_mysql_data:
+    name: optigf_mysql_data
+
+networks:
+  optigf_network:
+    name: optigf_network
+    ## Optionnel : configuration du réseau
+    # driver: bridge
+    # ipam:
+    #   config:
+    #     - subnet: 10.0.1.0/24
+    #       gateway: 10.0.1.1

@@ -1,0 +1,153 @@
+/* ==================== RESPONSIVE SIMPLE - CONSERVATION DU STYLE EXISTANT ==================== */
+
+/* FORCER LE COMPORTEMENT navbar-expand-md au lieu de navbar-expand-lg */
+/* Cacher le burger sur tablette et forcer l'affichage du menu */
+@media (min-width: 768px) {
+    .navbar-toggler {
+        display: none !important;
+    }
+    .navbar-collapse {
+        display: flex !important;
+        flex-basis: auto !important;
+    }
+    .navbar-nav {
+        flex-direction: row !important;
+    }
+}
+
+/* Afficher le burger seulement en dessous de 768px */
+@media (max-width: 767.98px) {
+    .navbar-toggler {
+        display: block !important;
+    }
+    .navbar-collapse:not(.show) {
+        display: none !important;
+    }
+}
+
+/* TABLETTE ET MOBILE : Cacher la sidebar droite */
+@media (max-width: 991.98px) {
+    .sidebar-right {
+        display: none !important;
+    }
+}
+
+/* MOBILE SEULEMENT : Navbar non-fixe et repositionnement */
+@media (max-width: 767.98px) {
+    /* Navbar relative au lieu de fixed */
+    .navbar {
+        position: relative !important;
+        top: auto !important;
+    }
+    
+    /* Container principal sans margin-top */
+    .main-container {
+        margin-top: 0 !important;
+    }
+    
+    /* Cacher les 3 BR qui créent l'espace pour la navbar fixe */
+    .sidebar-left + br,
+    .sidebar-left + br + br,
+    .sidebar-left + br + br + br {
+        display: none !important;
+    }
+    
+    /* Sidebar gauche repositionnée sous navbar */
+    .sidebar-left {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        margin-bottom: 20px;
+        padding: 0 15px;
+    }
+    
+    /* Contenu principal sans marges latérales */
+    .main-content {
+        margin-left: 15px !important;
+        margin-right: 15px !important;
+    }
+}
+
+/* TABLETTE : Ajustements spécifiques */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    /* Sidebar gauche reste fixe sur tablette */
+    .sidebar-left {
+        position: fixed !important;
+        top: 90px !important;
+        left: 0 !important;
+        width: 15% !important;
+    }
+    
+    /* Contenu principal avec marge gauche réduite */
+    .main-content {
+width: 75%;
+    }
+}
+
+
+/* MOBILE : Formulaires empilés au lieu de côte à côte */
+@media (max-width: 767.98px) {
+    #account-section.d-flex.justify-content-between {
+        flex-direction: column !important;
+        gap: 30px;
+    }
+    
+    .form-container {
+        max-width: 100% !important;
+    }
+}
+
+/* MOBILE SEULEMENT : Navigation sections adaptée */
+@media (max-width: 767.98px) {
+    /* Sections en ligne au lieu de colonne */
+    .sidebar-left .nav.flex-column {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 10px;
+    }
+    
+    .sidebar-left .nav-link {
+        flex: 1 1 auto;
+        min-width: 120px;
+        text-align: center;
+        white-space: normal !important;
+    }
+}
+
+/* TABLETTE : Navigation sections normales */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    /* Garder la navigation en colonne sur tablette */
+    .sidebar-left .nav.flex-column {
+        flex-direction: column !important;
+    }
+}
+
+/* PETIT MOBILE : Ajustements supplémentaires */
+@media (max-width: 575.98px) {
+    /* Logo plus petit */
+    .navbar-brand h1 {
+        font-size: 2rem !important;
+        letter-spacing: 3px !important;
+    }
+    
+    .navbar-brand img {
+        height: 50px !important;
+    }
+    
+    /* Sections plus compactes */
+    .sidebar-left .nav-link {
+        min-width: 100px;
+        font-size: 0.9rem;
+        padding: 8px !important;
+    }
+    
+    /* Contenu avec moins de padding */
+    .main-content {
+        padding: 15px !important;
+        margin-left: 10px !important;
+        margin-right: 10px !important;
+    }
+}
+
+/* TABLETTE : Ajustement intermédiaire (déjà défini plus haut) */

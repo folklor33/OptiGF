@@ -1,0 +1,66 @@
+## 🎨 Guide de style Markdown utilisé
+
+### 1. Titres
+# H1 pour le titre principal
+## H2 pour les sections
+### H3 pour les sous-sections
+#### H4 pour les détails
+
+### 2. Emphases
+*italique* ou _italique_
+**gras** ou __gras__
+***gras italique*** ou ___gras italique___
+
+### 3. Listes
+1. Liste numérotée
+2. Deuxième élément
+   - Sous-liste
+   - Autre élément
+     * Niveau plus profond
+
+### 4. Citations
+> Citation simple
+>> Citation imbriquée
+
+### 5. Code
+Inline `code` dans le texte
+```javascript
+// Bloc de code avec coloration syntaxique
+```
+
+### 6. Tableaux
+| Aligné à gauche | Centré | Aligné à droite |
+|:----------------|:------:|----------------:|
+| Texte           | Texte  | Texte          |
+
+### 7. Liens et images
+[Lien](url)
+![Alt text](image-url)
+
+### 8. Details/Summary (dépliants)
+<details>
+<summary>Cliquer pour déplier</summary>
+Contenu déplié
+</details>
+
+### 9. Badges et shields
+[![Badge](url-image)](url-lien)
+
+### 10. Emojis
+🚀 ⚙️ 🔒 📊 📋
+
+### 11. HTML intégré
+<div align="center">
+Contenu centré
+</div>
+
+### 12. Séparateurs
+---
+
+---
+
+<div align="center">
+
+*Made with 💙 by OptiGF Team*
+
+</div>

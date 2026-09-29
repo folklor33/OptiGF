@@ -1,0 +1,80 @@
+{
+	"accueil": [
+		{
+			"id": "home",
+			"name": "Bienvenue"
+		},
+		{
+			"id": "account",
+			"name": "Compte"
+		},
+		{
+			"id": "faq",
+			"name": "F.A.Q."
+		},
+		{
+			"id": "about",
+			"name": "À propos"
+		}
+	],
+	"injection": [
+		{
+			"id": "home",
+			"name": "Présentation du projet"
+		},
+		{
+			"id": "tutos",
+			"name": "Injection : fonctionnalités"
+		},
+		{
+			"id": "uiswitcher",
+			"name": "UI Switcher"
+		},
+		{
+			"id": "download",
+			"name": "Téléchargement"
+		}
+	],
+	"settings": [
+		{
+			"id": "home",
+			"name": "Présentation"
+		},
+		{
+			"id": "windows",
+			"name": "Windows"
+		},
+		{
+			"id": "nvidia",
+			"name": "Nvidia"
+		}
+	],
+	"ui_creator": [
+		{
+			"id": "home",
+			"name": "Présentation"
+		},
+		{
+			"id": "template",
+			"name": "< templates >"
+		},
+		{
+			"id": "maker",
+			"name": "Créateur d'UIs"
+		}
+	],
+	"legal": [
+		{
+			"id": "home",
+			"name": "Mentions légales"
+		},
+		{
+			"id": "cgu",
+			"name": "Conditions Générales d'Utilisation"
+		},
+		{
+			"id": "privacy",
+			"name": "Politique de Confidentialité"
+		}
+	]
+}

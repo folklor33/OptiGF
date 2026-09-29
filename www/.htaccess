@@ -1,0 +1,120 @@
+# # .htaccess#
+# ########## Erreurs HTTP ###########
+# # Requête incorrecte. Bad Request.
+# ErrorDocument 400 /errors/400.php#
+# # Non autorisé. Unauthorized.
+# ErrorDocument 401 /errors/401.php#
+# # Paiement requis. Payment Required.
+# ErrorDocument 402 /errors/402.php#
+# # Accès interdit. Forbidden.
+# ErrorDocument 403 /errors/403.php#
+# # Page non trouvée. Not Found.
+# ErrorDocument 404 /errors/404.php#
+# # Méthode non autorisée. Method Not Allowed.
+# ErrorDocument 405 /errors/405.php#
+# # Non acceptable. Not Acceptable.
+# ErrorDocument 406 /errors/406.php#
+# # La requête a expiré. Request Timeout.
+# ErrorDocument 408 /errors/408.php#
+# # Conflit. Conflict.
+# ErrorDocument 409 /errors/409.php#
+# # Ressource supprimée. Gone.
+# ErrorDocument 410 /errors/410.php#
+# # Longueur requise. Length Required.
+# ErrorDocument 411 /errors/411.php#
+# # Entité de requête trop grande. Payload Too Large.
+# ErrorDocument 413 /errors/413.php#
+# # URI trop long. URI Too Long.
+# ErrorDocument 414 /errors/414.php#
+# # Type de média non supporté. Unsupported Media Type.
+# ErrorDocument 415 /errors/415.php#
+# # Trop de requêtes. Too Many Requests.
+# ErrorDocument 429 /errors/429.php#
+# # Erreur interne du serveur. Internal Server Error.
+# ErrorDocument 500 /errors/500.php#
+# # Non implémenté. Not Implemented.
+# ErrorDocument 501 /errors/501.php#
+# # Mauvaise passerelle. Bad Gateway.
+# ErrorDocument 502 /errors/502.php#
+# # Service indisponible. Service Unavailable.
+# ErrorDocument 503 /errors/503.php#
+# # La passerelle a expiré. Gateway Timeout.
+# ErrorDocument 504 /errors/504.php#
+# # Authentification réseau requise. Network Authentication Required.
+# ErrorDocument 511 /errors/511.php
+
+########## Divers ##########
+ErrorDocument 403 /
+ErrorDocument 404 /
+
+<IfModule mod_authz_core.c>
+    <FilesMatch "^download\.php$">
+        Require all granted
+    </FilesMatch>
+</IfModule>
+
+# Interdire l'accès à des fichiers spécifiques
+<IfModule mod_authz_core.c>
+    <FilesMatch "^(config\.php|DatabaseManager\.php|HeadersManager\.php|SecureDownloadManager\.php|SecurityManager\.php|SessionManager\.php|UserManager\.php)$"> 
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+# # Interdire l'accès à ui (page pas encore terminée)
+# <IfModule mod_authz_core.c>
+#     <FilesMatch "^(ui.php)$"> 
+#         Require all denied
+#     </FilesMatch>
+# </IfModule>
+
+# Interdire l'accès à tous les fichiers commençant par "." et "_"
+<IfModule mod_authz_core.c>
+    <FilesMatch "^[._].*">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+########## Cache ##########
+
+# Désactiver le cache pour les fichiers CSS | JS | PHP | WEBP
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|php|xml|txt|ini)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires 0
+        Header unset ETag
+        FileETag None
+    </FilesMatch>
+</IfModule>
+
+
+# Configuration pour gros fichiers
+<Files "download.php">
+    php_value max_execution_time 0
+    php_value memory_limit 128M
+    php_value post_max_size 50M
+    php_value upload_max_filesize 50M
+    LimitRequestBody 5368709120
+</Files>
+
+# Désactiver la compression pour les téléchargements
+<FilesMatch "\.(zip|exe)$">
+    SetEnv no-gzip 1
+    SetEnv no-vary 1
+</FilesMatch>
+
+# Headers pour améliorer les téléchargements
+<IfModule mod_headers.c>
+    # Pour les fichiers de téléchargement
+    <FilesMatch "download\.php$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+</IfModule>
+
+# Désactiver le buffering pour PHP
+<IfModule mod_php7.c>
+    php_flag output_buffering Off
+    php_flag implicit_flush On
+</IfModule>

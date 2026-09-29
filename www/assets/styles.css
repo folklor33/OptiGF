@@ -1,0 +1,465 @@
+@font-face {
+	font-family: "LilitaOne";
+	src: url(../assets/LilitaOne-Regular.ttf);
+}
+
+* {
+	font-weight: 400;
+}
+
+h1 {
+	font-family: "LilitaOne", sans-serif;
+	font-size: 3rem;
+	letter-spacing: 4px;
+	font-weight: bold;
+	text-shadow:
+		0 0 5px rgba(0, 0, 0, 0.688),
+		0 0 10px rgba(0, 0, 0, 0.688),
+		0 0 20px rgba(0, 0, 0, 0.688);
+}
+
+h2 {
+	font-weight: bold;
+}
+
+h3 {
+	margin-top: 50px;
+}
+
+a {
+	color: orange;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.disabled {
+	cursor: not-allowed;
+}
+
+.nodeco :hover {
+	text-decoration: none;
+}
+
+.bg-primary {
+	background-color: #bb5c1c !important;
+}
+
+.text-justify {
+	text-align: justify;
+	hyphens: auto;
+}
+
+.text-muted {
+	color: gray !important;
+}
+
+/* Header fixe en haut */
+.navbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1030;
+	background: linear-gradient(45deg, #6b3612, #9e4d17, #c05e1d, #ffc6a0);
+	background-size: 400% 400%;
+	animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+	0% {
+		background-position: 0% 50%;
+	}
+
+	50% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+#navbarNav a.active {
+	text-decoration: underline;
+	border-radius: 10px;
+}
+
+#navbarNav a.active strong {
+	text-shadow: 0 0 10px black, 0 0 20px black, 0 0 30px black;
+}
+
+/* Conteneur principal avec marge pour le header */
+.main-container {
+	margin-top: 90px;
+	min-height: calc(100vh - 90px);
+}
+
+/* Sidebar gauche fixe */
+.sidebar-left {
+	position: fixed;
+	top: 90px;
+	left: 0;
+	overflow-y: auto;
+	z-index: 1020;
+}
+
+/* Sidebar droite fixe */
+.sidebar-right {
+	position: fixed;
+	top: 90px;
+	right: 0;
+	overflow-y: auto;
+	z-index: 1020;
+}
+
+/* Contenu principal avec marges pour les sidebars */
+.main-content {
+	margin-left: 20%;
+	margin-right: 20%;
+	padding: 20px;
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 6px;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+	backdrop-filter: blur(10px);
+}
+
+.content-section {
+	opacity: 0;
+	animation: fadeInUp 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Footer qui apparaît seulement en bas du contenu */
+footer {
+	margin-top: auto;
+}
+
+/* Styles pour les menus latéraux */
+.section-link span {
+	padding: 10px;
+}
+
+.section-link.active {
+	color: #bb5c1c !important;
+	border-color: #bb5c1c !important;
+	background-color: rgba(255, 193, 7, 0.1);
+}
+
+.section-link:hover {
+	color: #bb5c1c !important;
+	border-color: #bb5c1c !important;
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebars .nav-link {
+	transition: transform 0.3s ease;
+	width: min-content;
+	white-space: nowrap;
+}
+
+.sidebars .nav-link:hover {
+	color: #bb5c1c !important;
+	background-color: rgba(255, 255, 255, 0.05);
+	transform: translateX(15px);
+}
+
+/* Ajustement des sidebars */
+.sidebar-left,
+.sidebar-right {
+	padding: 0 15px;
+}
+
+.form-container {
+	max-width: 45%;
+}
+
+#account-section.content-section[style*="display: none"] {
+	display: none !important;
+}
+
+.form-floating>.form-control {
+	background-color: rgba(255, 255, 255, 0.05);
+	border: 2px solid rgba(255, 255, 255, 0.1);
+	color: white;
+	border-radius: 6px;
+	transition: all 0.3s ease;
+}
+
+.form-floating>.form-control:focus {
+	background-color: rgba(255, 255, 255, 0.08);
+	border-color: #bb5c1c;
+	box-shadow: 0 0 0 0.25rem rgba(187, 92, 28, 0.25);
+	color: white;
+}
+
+.form-floating>label {
+	color: rgba(255, 255, 255, 0.7);
+	transition: all 0.3s ease;
+}
+
+.form-floating>.form-control:focus~label,
+.form-floating>.form-control:not(:placeholder-shown)~label {
+	color: #bb5c1c;
+}
+
+.form-floating>.form-control::placeholder {
+	color: transparent;
+}
+
+.btn-custom-primary {
+	background: linear-gradient(135deg, #bb5c1c 0%, #d4681f 100%);
+	border: none;
+	border-radius: 6px;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 15px rgba(187, 92, 28, 0.3);
+	color: white;
+}
+
+.btn-custom-primary:hover {
+	background: linear-gradient(135deg, #d4681f 0%, #bb5c1c 100%);
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(187, 92, 28, 0.4);
+	color: white;
+}
+
+.btn-custom-success {
+	transition: all 0.3s ease;
+	background-color: #bb5c1c71;
+}
+
+.btn-custom-success:hover {
+	background-color: #bb5c1cff;
+	box-shadow: 0 0 30px rgba(187, 92, 28, 0.4);
+}
+
+.form-check-input {
+	background-color: rgba(255, 255, 255, 0.1);
+	border: 2px solid rgba(255, 255, 255, 0.3);
+	border-radius: 6px;
+	width: 1.2em;
+	height: 1.2em;
+}
+
+.form-check-input:checked {
+	background-color: #bb5c1c;
+	border-color: #bb5c1c;
+}
+
+.form-check-input:focus {
+	border-color: #bb5c1c;
+	outline: 0;
+	box-shadow: 0 0 0 0.25rem rgba(187, 92, 28, 0.25);
+}
+
+.form-title {
+	color: #bb5c1c;
+}
+
+.form-subtitle {
+	color: rgba(255, 255, 255, 0.8);
+	font-size: 1.1rem;
+}
+
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.46);
+	/* Fallback pour tous les navigateurs */
+	z-index: 9999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	animation: fadeIn 0.3s ease;
+
+	/* Support multi-navigateurs pour backdrop-filter */
+	-webkit-backdrop-filter: blur(0.3rem);
+	backdrop-filter: blur(0.3rem);
+}
+
+/* Fallback pour navigateurs ne supportant pas backdrop-filter */
+@supports not (backdrop-filter: blur(0.3rem)) {
+	.modal-overlay {
+		background: rgba(0, 0, 0, 0.85);
+		/* Plus opaque sans blur */
+	}
+}
+
+.modal-content {
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 12px;
+	padding: 2rem;
+	max-width: 400px;
+	width: 90%;
+	text-align: center;
+	backdrop-filter: blur(10px);
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-close {
+	background: #bb5c1c;
+	border: none;
+	border-radius: 6px;
+	color: white;
+	padding: 0.5rem 1.5rem;
+	margin-top: 1rem;
+	cursor: pointer;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+	}
+}
+
+/* Validation mot de passe en temps réel */
+.password-strength {
+	height: 4px;
+	border-radius: 2px;
+	margin-top: 0.5rem;
+	background-color: rgba(255, 255, 255, 0.1);
+	overflow: hidden;
+}
+
+.password-strength-bar {
+	height: 100%;
+	transition: all 0.3s ease;
+	border-radius: 2px;
+	width: 0%;
+}
+
+.strength-weak {
+	background: linear-gradient(90deg, #dc3545, #fd7e14);
+}
+
+.strength-medium {
+	background: linear-gradient(90deg, #fd7e14, #ffc107);
+}
+
+.strength-strong {
+	background: linear-gradient(90deg, #ffc107, #198754);
+}
+
+section.photos-list {
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+	padding-top: 15px;
+	margin-top: 40px;
+}
+
+
+
+/* FAQ Accordion */
+.accordion-item {
+	background: transparent;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	margin-bottom: 10px;
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.accordion-item:not(:first-of-type) {
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.accordion-button {
+	background: rgba(255, 255, 255, 0.05);
+	color: white;
+	border: none;
+	padding: 15px 20px;
+	font-weight: bold;
+	border-radius: 6px;
+	transition: all 0.3s ease;
+}
+
+.accordion-button:not(.collapsed) {
+	background: rgba(187, 92, 28, 0.2);
+	color: #bb5c1c;
+	box-shadow: none;
+	border-radius: 6px 6px 0 0;
+}
+
+.accordion-button:focus {
+	border-color: #bb5c1c;
+	box-shadow: none;
+}
+
+.accordion-button::after {
+	filter: brightness(0) invert(1);
+	transition: transform 0.3s ease;
+}
+
+.accordion-button:not(.collapsed)::after {
+	filter: brightness(0) invert(1) !important;
+}
+
+.accordion-collapse {
+	transition: height 0.1s ease;
+}
+
+.accordion-body {
+	background: rgba(255, 255, 255, 0.02);
+	color: rgba(255, 255, 255, 0.9);
+	padding: 15px 20px 15px 50px;
+	border-radius: 0 0 6px 6px;
+	font-weight: lighter;
+	animation: slideDown 0.1s ease;
+}
+
+@keyframes slideDown {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.photo-droite img, .photo-gauche img {
+	max-width: 400px;
+}
+
+.alert-warning {
+	background-color: #cc5e159a;
+	border-color: #ffecb5;
+	color: #fff3cd;
+}
+
+.alert-danger {
+	background-color: #80040eb9;
+	border-color: #f5c2c7;
+	color: #f8d7da;
+}

@@ -740,9 +740,9 @@ $isUserLoggedIn = SessionManager::get('user_id') !== null;
                             <p class="mb-0">1. Téléchargez le launcher  OptiGF.exe</p>
                             <p class="mb-0">2. Exécutez le fichier et connectez-vous à votre compte OptiGF</p>
                             <p class="mb-0">3. Choisissez le chemin de votre jeu (optionnel : vérifier votre installation)</p>
-                            <p class="mb-0">4. Réalisez l'injection</p>
+                            <p class="mb-0">4. Réalisez l'injection + bouton "icons" afin d'éviter les carrés roses</p>
                             <p class="mb-0">5. Attendez la fin du téléchargement + extraction des ressources</p>
-                            <p class="mb-0">6. Lancez GrandFantasia.exe directement dans le dossier du jeu ou bia le bouton Play de l'application OptiGF</p>
+                            <p class="mb-0">6. Lancez GrandFantasia.exe directement dans le dossier du jeu ou via le bouton Play de l'application OptiGF</p>
                         </div>
                         <div class="w-100 text-center">
                             <img style="width: 40%;" class="zoomable-image"

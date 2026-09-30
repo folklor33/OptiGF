@@ -1,6 +1,6 @@
 <div align="center">
 
-# OptiGF - Documentation technique 🚀
+# OptiGF - Aperçu technique 🚀
 
 </div>
 
@@ -15,8 +15,8 @@
 
 
 [![Discord](https://img.shields.io/discord/1092603037027151902?logo=discord&logoColor=white&target=_blank)](https://discord.gg/58j4JnYFdz)
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg)]()
+[![Status](https://img.shields.io/badge/status-active-success.svg)](https://optigf.eu/api/v1/connect.php)
+[![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg)](https://optigf.eu/injection.php)
 
 ___
 
@@ -36,11 +36,11 @@ ___
 
 | Fonctionnalité | Description |
 |----------------|-------------|
-| 📊 Site Web | Guides, Config comptes, Téléchargement Injection |
+| 📊 Site Web | Guides, Config comptes, Téléchargement launcher Injection |
+| 🤖 Server Discord + Bot | Gestion utilisateurs et des clés |
 | 🔒 Sécurité | Clés uniques renouvellables, Managers sur le site |
 | 🔄 API EndPoint | Interface programmatique sécurisée |
-| ♻️ TrapFantasia | Application se connectant à l'API (non disponible sur le repo) |
-| 🤖 Bot Discord | Gestion utilisateurs et des clés depuis Discord |
+| ♻️ Launcher OptiGF | Application se connectant à l'API (non disponible sur le repo) |
 
 ___
 
@@ -53,53 +53,37 @@ ___
 ```plaintext
 optigf/
   │
-  ├── www/                               # Interface Web 🌐
-  │   ├── api/v1/connect.php                 # API REST
-  │   ├── assets/ ...                        # Ressources ...
-  │   ├── gf/                                # Logique GF
-  │   └── managers/                          # Gestionnaires
+  ├── www/                               # Interface Web
+  │   ├── api/v1/connect.php                  # API REST
+  │   ├── assets/ ...                         # Ressources ...
+  │   ├── gf/                                 # Logique GF
+  │   └── managers/                           # Gestionnaires
   │
   │
-  ├── discord-bot/                       # Bot Discord 🤖
-  │   ├── src/ bot.js                        # Code principal (commandes, ...)
-  │   ├── Dockerfile                         # Dockerfile
-  │   └── package.json                       # Importation dépendances
+  ├── discord-bot/                       # Bot Discord
+  │   ├── src/ bot.js                         # Code principal (commandes, ...)
+  │   ├── Dockerfile                          # Dockerfile
+  │   └── package.json                        # Importation dépendances
   │
   │
-  ├── mariadb-config/                    # MARIADB Config ⚙️
-  │     └── conf.d/ timezone.cnf             # Europe/Paris
-  │           └── ...                        # Ressources image ...
+  ├── php-config/                        # APACHE-PHP
+  │   ├── docker-php-ext-mysqli.ini           # Extension MySQL i
+  │   ├── docker-php-ext-pdo_mysql.ini        # Extension MySQL PDO
+  │   ├── env.php                             # Variables env PHP
+  │   ├── env.php.example                     # Exemple Variables env PHP
+  │   ├── archives/ ...                       # Archives et documents inutilisés (anciennes versions de l'injection, ...)
+  │   ├── injection/compiled/ ...             # Fichiers de l'injection servis via API authentifiée
+  │   ├── ui/ ...                             # Différentes UI pour GF
+  │   └── exe/ ...
   │
+  │                                      # DOCKER
+  ├── docker-compose.yml                      # Fichier Docker-Compose
+  ├── Dockerfile                              # Dockerfile
+  ├── .env                                    # Fichier Docker-Compose
   │
-  ├── mariadb-data/                      # MARIADB bdd ♻️
-  │     └── ...                              # datas ...
-  │
-  │                                      
-  ├── php-config/                        # PHP ⚙️
-  │   ├── docker-php-ext-mysqli.ini          # Extension MySQL i
-  │   ├── docker-php-ext-pdo_mysql.ini       # Extension MySQL PDO
-  │   ├── env.php                            # Variables env PHP
-  │   ├── env.php.example                    # Exemple Variables env PHP
-  │   ├── GF_TG_UI_Vx.y.zip                  # ZIP Injection avec UI Trap
-  │   └── GF_TG_Vx.y.zip                     # ZIP Injection Trap
-  │
-  ├── phpmyadmin-config/                 # PHPMYADMIN ⚙️
-  │   ├── themes/ ...                        # Thèmes
-  │   ├── config.secret.inc.php              # Secret Blowfish
-  │   ├── config.secret.inc.php.example      # Exemple Secret Blowfish 
-  │   ├── config.inc.php                     # Réglages PMA par défault
-  │   └── config.user.inc.php                # Réglages PMA modifications
-  │
-  │
-  │                                      # DOCKER ⚙️
-  ├── compose.override.yml                   # Fichier Docker-Compose
-  ├── Dockerfile                             # Dockerfile
-  ├── optigf.env                             # Fichier Docker-Compose
-  ├── optigf.yml                             # Fichier Docker-Compose
-  │
-  │                                      # GIT ⚙️
-  ├── .gitignore                             # Git Ignore
-  └── README.md                              # Read Me
+  │                                      # GIT
+  ├── .gitignore                              # Git Ignore
+  └── README.md                               # Read Me
 ```
 
 ___
@@ -114,25 +98,28 @@ ___
 
 
 ```v
-/help           // Affiche la liste des commandes disponibles
+/list-users             // Liste tous les utilisateurs enregistrés et leur statut UI
 
-/list-users     // Liste tous les utilisateurs enregistrés et leur statut UI
+/sync-nicknames         //Réinitialise le pseudo = username (évite les confusions)
 
-/test-notify    // Envoie la clé actuelle à un utilisateur spécifique
-                // Paramètre: user:<nom_utilisateur>   
+/resend-carso-key <username>  // Renvoyer sa clé à un utilisateur
 
-/update-key-all // Renouvelle toutes les clés et notifie les utilisateurs
+/renew-carso-key all    // Renouvelle toutes les clés et notifie les utilisateurs
+/renew-carso-key <username>   // Renouveler la clé d'un utilisateur en particulier
+```
 
-/send-mp        // Envoie un message privé à un utilisateur spécifique
-                // Paramètres: user:<nom_utilisateur> message:<texte>
+### 🎯 Commandes utilisateur
 
-/send-channel   // Envoie un message dans le salon actuel
-                // Paramètre: message:<texte>
 
-/update-user    // Gestion complète des utilisateurs (ajout/suppression/modification)
-            // * ajouter: old-user:none new-user:<nom> ui-status:<true/false>
-            // * supprimer: old-user:<nom> new-user:none
-            // * modifier: old-user:<nom> new-user:<nouveau_nom> ui-status:<true/false>
+```v
+/help                  // Affiche la liste des commandes disponibles
+/msg                   // Envoie un message dans le salon actuel
+
+/register-carso-key    // Générer une clé et se la faire envoyer par MP
+
+/resend-carso-key      // Recevoir à nouveau sa clé en MP
+
+/renew-carso-key       // Générer une nouvelle clé pour soi-même et se la faire envoyer par MP
 ```
 
 ### 🔒 Sécurité et contrôle d'accès

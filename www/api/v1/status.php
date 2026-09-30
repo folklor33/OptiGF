@@ -140,8 +140,17 @@ function compareVersions(string $version1, string $version2): bool
  */
 function checkAppVersion(string $userAgent): bool
 {
-    // Le User-Agent doit correspondre exactement à la version attendue
-    return strpos($userAgent, CURRENT_APP_VERSION) !== false;
+    // Le User-Agent doit se terminer exactement par la version attendue (évite 1.3 == 1.30 / 1.35)
+    $expected = (string) CURRENT_APP_VERSION;
+    return $expected !== '' && substr($userAgent, -strlen($expected)) === $expected;
+}
+
+/**
+ * IP réelle du client (le site est derrière Cloudflare)
+ */
+function getClientIp(): string
+{
+    return $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 }
 
 // ===== GESTION DES REQUÊTES =====
@@ -181,7 +190,7 @@ try {
     }
 
     // Vérification du token (obligatoire)
-    if (!isset($data['token']) || empty($data['token'])) {
+    if (!is_array($data) || !isset($data['token']) || !is_string($data['token']) || $data['token'] === '') {
         throw new Exception("Token manquant");
     }
 
@@ -205,7 +214,9 @@ try {
     $appIsUpToDate = checkAppVersion($userAgent);
 
     // Préparer les versions installées (si fournies)
-    $installedVersions = $data['installed_versions'] ?? [];
+    $installedVersions = is_array($data['installed_versions'] ?? null)
+        ? array_filter($data['installed_versions'], 'is_string')
+        : [];
 
     // Construire la réponse avec les statuts de chaque composant
     $response = [
@@ -267,14 +278,14 @@ try {
     $isProduction = defined('ENVIRONMENT') && ENVIRONMENT === 'production';
     $errorMessage = $isProduction ? "Erreur serveur" : "Erreur base de données: " . $e->getMessage();
     sendJsonResponse("error", $errorMessage);
-} catch (Exception $e) {
+} catch (Throwable $e) {
     $isProduction = defined('ENVIRONMENT') && ENVIRONMENT === 'production';
     $errorMessage = $isProduction ? "Une erreur est survenue" : $e->getMessage();
     
     error_log(sprintf(
         "Erreur status check - Message: %s, IP: %s",
         $e->getMessage(),
-        $_SERVER['REMOTE_ADDR']
+        getClientIp()
     ));
 
     sendJsonResponse("error", $errorMessage);

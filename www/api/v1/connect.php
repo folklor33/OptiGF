@@ -169,19 +169,10 @@ function showHtmlPage(?string $error = null): void
     exit;
 }
 
-// Gestion des requêtes OPTIONS (CORS pre-flight)
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit;
-}
-
-// Vérification de la méthode HTTP
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    showHtmlPage("Cette API n'accepte que les requêtes POST");
-}
-
-// Si ce n'est pas un appel API, afficher la page HTML
-if (!isApiCall()) {
-    showHtmlPage();
+// IP réelle du client (le site est derrière Cloudflare)
+function getClientIp(): string
+{
+    return $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 }
 
 try {
@@ -201,10 +192,14 @@ try {
         throw new Exception("JSON invalide: " . json_last_error_msg());
     }
 
-    // Validation des champs requis
+    if (!is_array($data)) {
+        throw new Exception("JSON invalide");
+    }
+
+    // Validation des champs requis (chaînes non vides ; "0" est un mot de passe valide)
     $requiredFields = ['discord', 'account_key', 'password'];
     $missingFields = array_filter($requiredFields, function ($field) use ($data) {
-        return empty($data[$field]);
+        return !isset($data[$field]) || !is_string($data[$field]) || $data[$field] === '';
     });
 
     if (!empty($missingFields)) {
@@ -253,7 +248,7 @@ try {
             error_log(sprintf(
                 "Connexion réussie - User: %d, IP: %s",
                 $result['id'],
-                $_SERVER['REMOTE_ADDR']
+                getClientIp()
             ));
 
             sendJsonResponse("success", "CONNECTION SUCESS", [
@@ -269,7 +264,7 @@ try {
         throw new Exception("Erreur serveur");
     }
 
-} catch (Exception $e) {
+} catch (Throwable $e) {
     // On vérifie d'abord si la constante est définie
     $isProduction = defined('ENVIRONMENT') && ENVIRONMENT === 'production';
 
@@ -280,7 +275,7 @@ try {
     error_log(sprintf(
         "Erreur de connexion - Message: %s, IP: %s",
         $e->getMessage(),
-        $_SERVER['REMOTE_ADDR']
+        getClientIp()
     ));
 
     sendJsonResponse("error", $errorMessage);

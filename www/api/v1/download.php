@@ -195,7 +195,6 @@ function streamFile($filePath, $filename)
     header('Content-Disposition: attachment; filename="' . $filename . '"');
     header('Content-Length: ' . $fileSize);
     header('Cache-Control: no-store');
-    header('Accept-Ranges: bytes');
 
     while (ob_get_level()) {
         ob_end_clean();
@@ -236,12 +235,8 @@ try {
     $rawInput = file_get_contents('php://input');
     $data = json_decode($rawInput, true);
     
-    // Debug logging
-    error_log("Download request received");
-    error_log("Data: " . print_r($data, true));
-    error_log("Token received: " . ($data['token'] ?? 'NO TOKEN'));
-    
-    if (!$data || !isset($data['token']) || !isset($data['type']) || !isset($data['variant'])) {
+    if (!is_array($data) || !isset($data['token'], $data['type'], $data['variant'])
+        || !is_string($data['token']) || !is_string($data['type']) || !is_string($data['variant'])) {
         throw new Exception("Paramètres manquants");
     }
 

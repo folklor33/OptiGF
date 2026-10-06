@@ -12,7 +12,7 @@
             <div class="">
                 <h5>Contact 📧</h5>
                 <p class="text-white">
-                    <span>Email: <a target="_blank" rel="noopener noreferrer" href="mailto:contact@optigf.eu">contact@optigf.eu</a></span><br>
+                    <span>Email: <a target="_blank" rel="noopener noreferrer" href="mailto:bulle.optigf@gmail.com">bulle.optigf@gmail.com</a></span><br>
                 </p>
             </div>
 
@@ -31,7 +31,7 @@
 
         <div class="d-flex justify-content-between">
             <div>
-                <p class="mb-0">&copy; 2025 OptiGF. Aucun droit réservé.</p>
+                <p class="mb-0"><span style="text-decoration : line-through;">&copy;</span> 2025 ~ 2026 OptiGF. Aucun droit réservé.</p>
             </div>
             <div class="d-flex gap-3">
                 <a href="legal.php">Mentions légales</a>

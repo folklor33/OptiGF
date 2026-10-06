@@ -36,14 +36,14 @@ define('CURRENT_APP_VERSION', "OptiGF Launcher C#/v1.3");
 define('FILENAME', "Launcher OptiGF v1.3.exe");
 
 // ########## Versions des fichiers ZIP (format: AAAAMMJJxx) #############################
-define('CURRENT_INJECTION_COMPILED', '2026092902');
+define('CURRENT_INJECTION_COMPILED', '2026100601');
 // ########## Versions des fichiers ZIP (format: AAAAMMJJxx) #############################
 
 define('CURRENT_INJECTION_UNCOMPILED', 'none');
 
-define('CURRENT_UI_TRAPWORLD', '2026070701');
-define('CURRENT_UI_VANILLA', '2026070701');
-define('CURRENT_UI_VLIK', '2026070701');
+define('CURRENT_UI_TRAPWORLD', '_2026070701');
+define('CURRENT_UI_VANILLA', '_2026070701');
+define('CURRENT_UI_VLIK', '_2026070701');
 
 // Détection automatique du chemin de base pour les URLs
 // En production: "/" | En dev avec sous-dossier: "/www/"

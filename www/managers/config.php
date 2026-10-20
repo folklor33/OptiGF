@@ -32,11 +32,11 @@ define('ENVIRONMENT', $env['app']['environment'] ?? 'development');
 // À mettre à jour manuellement lors de nouvelles releases
 
 // Version de l'application (correspond au User-Agent attendu)
-define('CURRENT_APP_VERSION', "OptiGF Launcher C#/v1.3");
-define('FILENAME', "Launcher OptiGF v1.3.exe");
+define('CURRENT_APP_VERSION', "OptiGF Launcher C#/v1.4");
+define('FILENAME', "Launcher OptiGF v1.4.exe");
 
 // ########## Versions des fichiers ZIP (format: AAAAMMJJxx) #############################
-define('CURRENT_INJECTION_COMPILED', '2026100601');
+define('CURRENT_INJECTION_COMPILED', '2026100603');
 // ########## Versions des fichiers ZIP (format: AAAAMMJJxx) #############################
 
 define('CURRENT_INJECTION_UNCOMPILED', 'none');

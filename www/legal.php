@@ -43,7 +43,7 @@ $current_section = isset($_GET['section']) ? $_GET['section'] : 'home';
 
                     <p class="mt-4 text-justify">Pour toute question relative à celles-ci, veuillez nous adresser un
                         e-mail <strong>en français</strong> à l'adresse <a target="_blank" rel="noopener noreferrer"
-                            href="mailto:contact@optigf.eu">contact@optigf.eu</a> en précisant le ou les articles
+                            href="mailto:bulle.optigf@gmail.com">bulle.optigf@gmail.com</a> en précisant le ou les articles
                         concernés.</p>
                     <p class="mt-4 text-justify">Pour toute résiliation volontaire, conformément à l'article 3.3 de nos
                         <a href="legal.php#cgu">CGU</a> et dans le cas spécifique où l'accès à votre compte personnel

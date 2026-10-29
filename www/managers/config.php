@@ -36,7 +36,7 @@ define('CURRENT_APP_VERSION', "OptiGF Launcher C#/v1.4");
 define('FILENAME', "Launcher OptiGF v1.4.exe");
 
 // ########## Versions des fichiers ZIP (format: AAAAMMJJxx) #############################
-define('CURRENT_INJECTION_COMPILED', '2026100603');
+define('CURRENT_INJECTION_COMPILED', '2026102701-fix');
 // ########## Versions des fichiers ZIP (format: AAAAMMJJxx) #############################
 
 define('CURRENT_INJECTION_UNCOMPILED', 'none');

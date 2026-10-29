@@ -758,7 +758,7 @@ $isUserLoggedIn = SessionManager::get('user_id') !== null;
                             </p>
 
                         <p class="text-muted mt-3">
-                            <span>Fichiers de l'injection: v<?= CURRENT_INJECTION_COMPILED ?> | Taille : ~250 Mo</span>
+                            <span>Fichiers de l'injection: v<?= CURRENT_INJECTION_COMPILED ?> | Taille : ~220 Mo</span>
                         </p>
                         </form>
 

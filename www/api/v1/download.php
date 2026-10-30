@@ -190,10 +190,37 @@ function streamFile($filePath, $filename)
         throw new Exception("Fichier trop volumineux ou inaccessible");
     }
 
+    // Reprise de téléchargement : "Range: bytes=DEBUT-" (ou "DEBUT-FIN")
+    $start = 0;
+    $end = $fileSize - 1;
+    $isPartial = false;
+    if (isset($_SERVER['HTTP_RANGE'])) {
+        if (!preg_match('/^bytes=(\d+)-(\d*)$/', trim($_SERVER['HTTP_RANGE']), $matches)) {
+            throw new Exception("En-tête Range invalide");
+        }
+
+        $start = (int) $matches[1];
+        $end = $matches[2] !== '' ? min((int) $matches[2], $fileSize - 1) : $fileSize - 1;
+
+        if ($start >= $fileSize || $start > $end) {
+            header_remove();
+            http_response_code(416);
+            header('Content-Range: bytes */' . $fileSize);
+            exit;
+        }
+        $isPartial = true;
+    }
+    $length = $end - $start + 1;
+
     header_remove();
+    if ($isPartial) {
+        http_response_code(206);
+        header('Content-Range: bytes ' . $start . '-' . $end . '/' . $fileSize);
+    }
+    header('Accept-Ranges: bytes');
     header('Content-Type: application/octet-stream');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
-    header('Content-Length: ' . $fileSize);
+    header('Content-Length: ' . $length);
     header('Cache-Control: no-store');
 
     while (ob_get_level()) {
@@ -205,30 +232,110 @@ function streamFile($filePath, $filename)
         throw new Exception("Impossible d'ouvrir le fichier");
     }
 
+    if ($start > 0) {
+        fseek($handle, $start);
+    }
+
     // Buffer optimal : 2MB pour très gros fichiers
     $bufferSize = 2097152; // 2MB
-    $totalSent = 0;
+    $remaining = $length;
 
-    while (!feof($handle) && connection_status() == 0) {
-        $buffer = fread($handle, $bufferSize);
-        if ($buffer === false)
+    while ($remaining > 0 && !feof($handle) && connection_status() == 0) {
+        $buffer = fread($handle, (int) min($bufferSize, $remaining));
+        if ($buffer === false || $buffer === '')
             break;
 
-        $bytesWritten = strlen($buffer);
         echo $buffer;
         flush();
 
-        $totalSent += $bytesWritten;
-
-        // Vérification périodique sans ralentir
-        if ($totalSent % (20 * $bufferSize) === 0) { // Toutes les 40MB
-            if (connection_aborted())
-                break;
-        }
+        $remaining -= strlen($buffer);
     }
 
     fclose($handle);
     exit;
+}
+
+// Fichiers autorisés pour le type "data" (chemins relatifs, sans traversal possible)
+const DATA_FILE_PATTERN = '#^data/(db/[a-z0-9_]+\.ini|translate/(fr|es|pt|us)/t_[a-z0-9_]+\.ini)$#';
+
+/**
+ * Liste les .ini bruts disponibles sous <injection/variant>/data/ :
+ * [chemin relatif => chemin absolu]
+ */
+function listDataFiles(string $root): array
+{
+    $dataDir = $root . DIRECTORY_SEPARATOR . 'data';
+    $files = [];
+    if (!is_dir($dataDir)) {
+        return $files;
+    }
+
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($dataDir, FilesystemIterator::SKIP_DOTS)
+    );
+    foreach ($iterator as $fileInfo) {
+        if (!$fileInfo->isFile()) {
+            continue;
+        }
+        $relative = str_replace('\\', '/', substr($fileInfo->getPathname(), strlen($root) + 1));
+        if (preg_match(DATA_FILE_PATTERN, $relative)) {
+            $files[$relative] = $fileInfo->getPathname();
+        }
+    }
+    ksort($files);
+    return $files;
+}
+
+/**
+ * Type "data" :
+ *  - sans "file" : manifeste JSON { version, files: [{ path, size, crc32, sha256 }], version_xml_b64 }
+ *    (crc32 = CRC32 du contenu brut, celui que le jeu stocke dans pkg.idx)
+ *  - avec "file" : contenu brut du fichier demandé (non zippé)
+ */
+function serveDataRequest(string $root, string $version, ?string $requestedFile): void
+{
+    $files = listDataFiles($root);
+
+    if ($requestedFile === null) {
+        if (empty($files)) {
+            throw new Exception("Aucun fichier data disponible");
+        }
+
+        $list = [];
+        foreach ($files as $relative => $absolute) {
+            $list[] = [
+                "path" => $relative,
+                "size" => filesize($absolute),
+                "crc32" => hexdec(hash_file('crc32b', $absolute)),
+                "sha256" => hash_file('sha256', $absolute)
+            ];
+        }
+
+        // _OptiGF_Launcher_Injection.xml : sert au launcher à savoir si la version injectée est à jour
+        $versionXml = $root . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . '_OptiGF_Launcher_Injection.xml';
+        $versionXmlB64 = (is_file($versionXml) && filesize($versionXml) <= 65536)
+            ? base64_encode(file_get_contents($versionXml))
+            : null;
+
+        error_log("Data manifest requested: " . count($list) . " files");
+        sendJsonResponse("success", "Data manifest", [
+            "version" => $version,
+            "files" => $list,
+            "version_xml_b64" => $versionXmlB64
+        ]);
+    }
+
+    // Seuls les fichiers du manifeste peuvent être téléchargés
+    if (!isset($files[$requestedFile])) {
+        throw new Exception("Fichier data invalide");
+    }
+
+    $absolute = realpath($files[$requestedFile]);
+    if ($absolute === false || strpos($absolute, $root) !== 0) {
+        throw new Exception("Chemin invalide");
+    }
+
+    streamFile($absolute, basename($absolute));
 }
 
 try {
@@ -269,7 +376,8 @@ try {
 
         $sourcePath = $basePath . $variantMap[$data['variant']];
 
-    } elseif ($data['type'] === 'injection') {
+    } elseif ($data['type'] === 'injection' || $data['type'] === 'data') {
+        // "data" = fichiers .ini bruts (data/db, data/translate) stockés à côté du ZIP d'injection
         $validVariants = ['compiled', 'uncompiled'];
         if (!in_array($data['variant'], $validVariants, true)) {
             throw new Exception("Variant injection invalide");
@@ -308,9 +416,15 @@ try {
         ],
     ];
 
-    $version = $versionMap[$data['type']][$data['variant']] ?? null;
+    $versionKey = $data['type'] === 'data' ? 'injection' : $data['type'];
+    $version = $versionMap[$versionKey][$data['variant']] ?? null;
     if (!$version || $version === 'none') {
         throw new Exception("Aucun fichier ZIP trouvé pour ce type/variant");
+    }
+
+    if ($data['type'] === 'data') {
+        $requestedFile = isset($data['file']) && is_string($data['file']) ? $data['file'] : null;
+        serveDataRequest($realSourcePath, $version, $requestedFile);
     }
 
     $zipFile = $sourcePath . $version . '.zip';

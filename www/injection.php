@@ -154,7 +154,7 @@ $isUserLoggedIn = SessionManager::get('user_id') !== null;
                             <li><strong>Vérifier l'installation</strong> avec le bouton bleu "OK"</li>
                             <li><strong>Appliquer</strong> l'injection ou les UI via les boutons correspondants</li>
                             <li><strong>Attendre</strong> les chargements et <strong>Lancer le jeu</strong> directement
-                                avec le bouton "Play" vert ou en double cliquant sur l'exécutable GrandFantasia.exe</li>
+                                avec le bouton "Start" vert ou en double cliquant sur l'exécutable GrandFantasia.exe</li>
                         </ul>
                     </div>
 

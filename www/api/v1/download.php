@@ -277,7 +277,9 @@ function listDataFiles(string $root): array
         if (!$fileInfo->isFile()) {
             continue;
         }
-        $relative = str_replace('\\', '/', substr($fileInfo->getPathname(), strlen($root) + 1));
+        // Les fichiers sont stockés avec leur casse d'origine (C_Item.ini, Translate/FR/...),
+        // alors que pkg.idx et le launcher travaillent en minuscules : la clé du manifeste est normalisée.
+        $relative = strtolower(str_replace('\\', '/', substr($fileInfo->getPathname(), strlen($root) + 1)));
         if (preg_match(DATA_FILE_PATTERN, $relative)) {
             $files[$relative] = $fileInfo->getPathname();
         }

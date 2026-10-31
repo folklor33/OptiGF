@@ -175,6 +175,21 @@ function getClientIp(): string
     return $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 }
 
+// Mise à jour obligatoire : un Launcher OptiGF plus ancien que la version attendue ne peut plus se connecter.
+// Les anciennes versions affichent simplement "message" ; les nouvelles exploitent aussi "update_required".
+$versionStatus = launcherVersionStatus($_SERVER['HTTP_USER_AGENT'] ?? '');
+if ($versionStatus['is_launcher'] && !$versionStatus['is_up_to_date']) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Mise à jour obligatoire : votre Launcher OptiGF (v" . $versionStatus['client'] . ") n'est plus supporté. "
+            . "Téléchargez la version v" . $versionStatus['latest'] . " sur " . $versionStatus['download_url'],
+        "update_required" => true,
+        "latest" => $versionStatus['latest'],
+        "download_url" => $versionStatus['download_url']
+    ]);
+    exit;
+}
+
 try {
     // Vérification de la taille du payload
     if ($_SERVER['CONTENT_LENGTH'] > 1000000) { // 1MB max

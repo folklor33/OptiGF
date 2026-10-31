@@ -42,20 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     sendJsonResponse("error", "Cette API n'accepte que les requêtes POST");
 }
 
-// Le User-Agent doit se terminer exactement par la version attendue (même règle que status.php)
 $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
-$expected = (string) CURRENT_APP_VERSION;
-$isUpToDate = $expected !== '' && substr($userAgent, -strlen($expected)) === $expected;
-
-// "OptiGF Launcher C#/v1.4" => "1.4"
-$latest = preg_match('#/v([0-9][0-9.]*)$#', $expected, $m) ? $m[1] : $expected;
+$versionStatus = launcherVersionStatus($userAgent);
 
 sendJsonResponse("success", "Version check successful", [
     "app" => [
         "current_version" => CURRENT_APP_VERSION,
-        "latest" => $latest,
-        "is_up_to_date" => $isUpToDate,
+        "latest" => $versionStatus['latest'],
+        "is_up_to_date" => $versionStatus['is_up_to_date'],
         "user_version" => substr($userAgent, 0, 100)
     ],
-    "download_url" => "https://optigf.eu/injection.php#download"
+    "download_url" => $versionStatus['download_url']
 ]);

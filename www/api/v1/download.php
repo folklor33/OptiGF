@@ -281,86 +281,51 @@ function listDataFiles(string $root): array
         // alors que pkg.idx et le launcher travaillent en minuscules : la clé du manifeste est normalisée.
         $relative = strtolower(str_replace('\\', '/', substr($fileInfo->getPathname(), strlen($root) + 1)));
         if (preg_match(DATA_FILE_PATTERN, $relative)) {
-            $files[$relative] = ['file' => $fileInfo->getPathname(), 'new' => false];
+            $files[$relative] = $fileInfo->getPathname();
         }
     }
-    // Fichiers listés dans data/manifest_new.txt : absents de pkg.idx, le launcher crée leur entrée dans l'index
-    foreach (listNewFiles($root) as $relative => $info) {
-        if (!isset($files[$relative])) {
-            $files[$relative] = $info;
-        }
-    }
-
     ksort($files);
     return $files;
 }
 
-// Extensions acceptées pour les fichiers de data/manifest_new.txt
-const NEW_FILE_PATTERN = '#^[a-z0-9_\-]+(/[a-z0-9_.\-]+)*\.(ini|dds|nif|fsm|area)$#';
+// Chemins acceptés dans data/manifest.txt (relatifs au dossier du jeu, sans remontée de dossier)
+const NEW_FILE_PATTERN = '#^[a-z0-9_\-]+(/[a-z0-9_.\-]+)*\.[a-z0-9]{1,8}$#i';
 
 /**
- * Chemin réel d'un fichier sous $base, en ignorant la casse de chaque segment (le serveur est sensible à la casse,
- * pas les listes ni le jeu). null si le fichier n'existe pas.
+ * Fichiers à injecter dans les archives du jeu en plus des .ini : data/manifest.txt, un chemin relatif au dossier
+ * du jeu par ligne (ex. UI\itemicon\A10436.dds). Ces fichiers sont livrés par le ZIP d'injection : l'API ne renvoie
+ * que la liste, le launcher décide lui-même s'il remplace une entrée de pkg.idx ou s'il en ajoute une.
+ * @return string[] chemins (séparateur "/", casse d'origine, sans doublon)
  */
-function resolveCaseInsensitive(string $base, string $relative): ?string
+function listNewFileNames(string $root): array
 {
-    $current = $base;
-    foreach (explode('/', $relative) as $segment) {
-        $found = null;
-        foreach (scandir($current) as $entry) {
-            if (strcasecmp($entry, $segment) === 0) {
-                $found = $entry;
-                break;
-            }
-        }
-        if ($found === null) {
-            return null;
-        }
-        $current .= DIRECTORY_SEPARATOR . $found;
-    }
-    return is_file($current) ? $current : null;
-}
-
-/**
- * Nouveaux fichiers à ajouter au jeu (absents de pkg.idx) : data/manifest_new.txt, un chemin relatif au dossier du jeu
- * par ligne (ex. UI\itemicon\A10436.dds) ; les fichiers eux-mêmes sont dans data/new/ avec la même arborescence.
- * [chemin relatif en minuscules => ['file' => chemin absolu, 'new' => true, 'name' => chemin en casse d'origine]]
- */
-function listNewFiles(string $root): array
-{
-    $list = $root . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'manifest_new.txt';
-    $base = realpath($root . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'new');
-    if (!is_file($list) || $base === false || filesize($list) > 4194304) {
+    $list = $root . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'manifest.txt';
+    if (!is_file($list) || filesize($list) > 4194304) {
         return [];
     }
 
-    $files = [];
+    $names = [];
     foreach (preg_split('/\r\n|\r|\n/', file_get_contents($list)) as $line) {
         $line = trim($line);
         if ($line === '' || $line[0] === '#' || $line[0] === ';' || strpos($line, '//') === 0) {
             continue;
         }
 
-        $relative = strtolower(ltrim(str_replace('\\', '/', $line), '/'));
-        if (strpos($relative, '..') !== false || !preg_match(NEW_FILE_PATTERN, $relative)) {
-            error_log("manifest_new.txt : chemin ignoré : " . $line);
+        $name = ltrim(str_replace('\\', '/', $line), '/');
+        if (strpos($name, '..') !== false || !preg_match(NEW_FILE_PATTERN, $name)) {
+            error_log("manifest.txt : chemin ignoré : " . $line);
             continue;
         }
-
-        $absolute = resolveCaseInsensitive($base, $relative);
-        if ($absolute === null) {
-            error_log("manifest_new.txt : fichier introuvable dans data/new : " . $line);
-            continue;
-        }
-        $files[$relative] = ['file' => $absolute, 'new' => true, 'name' => ltrim(str_replace('\\', '/', $line), '/')];
+        $names[strtolower($name)] = $name;
     }
-    return $files;
+    return array_values($names);
 }
 
 /**
  * Type "data" :
- *  - sans "file" : manifeste JSON { version, files: [{ path, size, crc32, sha256, is_new?, name? }], version_xml_b64 }
- *    (is_new + name : fichier à AJOUTER à pkg.idx, listé dans data/manifest_new.txt)
+ *  - sans "file" : manifeste JSON { version, files: [{ path, size, crc32, sha256 }], version_xml_b64, client_ini_b64, new_files: [chemin] }
+ *    (version_xml_b64 : data/_OptiGF_Launcher_Injection.xml ; client_ini_b64 : client.ini à la racine du dossier)
+ *    (new_files : contenu de data/manifest.txt, fichiers livrés par le ZIP à injecter dans les archives)
  *    (crc32 = CRC32 du contenu brut, celui que le jeu stocke dans pkg.idx)
  *  - avec "file" : contenu brut du fichier demandé (non zippé)
  */
@@ -374,18 +339,13 @@ function serveDataRequest(string $root, string $version, ?string $requestedFile)
         }
 
         $list = [];
-        foreach ($files as $relative => $info) {
-            $entry = [
+        foreach ($files as $relative => $absolute) {
+            $list[] = [
                 "path" => $relative,
-                "size" => filesize($info['file']),
-                "crc32" => hexdec(hash_file('crc32b', $info['file'])),
-                "sha256" => hash_file('sha256', $info['file'])
+                "size" => filesize($absolute),
+                "crc32" => hexdec(hash_file('crc32b', $absolute)),
+                "sha256" => hash_file('sha256', $absolute)
             ];
-            if ($info['new']) {
-                $entry["is_new"] = true;
-                $entry["name"] = $info['name'];
-            }
-            $list[] = $entry;
         }
 
         // _OptiGF_Launcher_Injection.xml : sert au launcher à savoir si la version injectée est à jour
@@ -394,11 +354,23 @@ function serveDataRequest(string $root, string $version, ?string $requestedFile)
             ? base64_encode(file_get_contents($versionXml))
             : null;
 
+        // client.ini : placé à la racine du dossier (<injection/variant>/client.ini), il remplace celui du jeu à chaque injection
+        $clientIniB64 = null;
+        foreach (scandir($root) as $entry) {
+            $path = $root . DIRECTORY_SEPARATOR . $entry;
+            if (strtolower($entry) === 'client.ini' && is_file($path) && filesize($path) <= 1048576) {
+                $clientIniB64 = base64_encode(file_get_contents($path));
+                break;
+            }
+        }
+
         error_log("Data manifest requested: " . count($list) . " files");
         sendJsonResponse("success", "Data manifest", [
             "version" => $version,
             "files" => $list,
-            "version_xml_b64" => $versionXmlB64
+            "version_xml_b64" => $versionXmlB64,
+            "client_ini_b64" => $clientIniB64,
+            "new_files" => listNewFileNames($root)
         ]);
     }
 
@@ -407,7 +379,7 @@ function serveDataRequest(string $root, string $version, ?string $requestedFile)
         throw new Exception("Fichier data invalide");
     }
 
-    $absolute = realpath($files[$requestedFile]['file']);
+    $absolute = realpath($files[$requestedFile]);
     if ($absolute === false || strpos($absolute, $root) !== 0) {
         throw new Exception("Chemin invalide");
     }

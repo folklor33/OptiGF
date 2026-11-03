@@ -32,18 +32,18 @@ define('ENVIRONMENT', $env['app']['environment'] ?? 'development');
 // À mettre à jour manuellement lors de nouvelles releases
 
 // Version de l'application (correspond au User-Agent attendu)
-define('CURRENT_APP_VERSION', "OptiGF Launcher C#/v1.4");
-define('FILENAME', "Launcher OptiGF v1.4.exe");
+define('CURRENT_APP_VERSION', "OptiGF Launcher C#/v2.0");
+define('FILENAME', "Launcher OptiGF v2.0.exe");
 
 // ########## Versions des fichiers ZIP (format: AAAAMMJJxx) #############################
-define('CURRENT_INJECTION_COMPILED', '2026102705');
+define('CURRENT_INJECTION_COMPILED', '2026110301');
 // ########## Versions des fichiers ZIP (format: AAAAMMJJxx) #############################
 
 define('CURRENT_INJECTION_UNCOMPILED', 'none');
 
-define('CURRENT_UI_TRAPWORLD', '_2026070701');
-define('CURRENT_UI_VANILLA', '_2026070701');
-define('CURRENT_UI_VLIK', '_2026070701');
+define('CURRENT_UI_TRAPWORLD', '0000000000');
+define('CURRENT_UI_VANILLA', '0000000000');
+define('CURRENT_UI_VLIK', '0000000000');
 
 // Détection automatique du chemin de base pour les URLs
 // En production: "/" | En dev avec sous-dossier: "/www/"

@@ -41,6 +41,10 @@ define('CURRENT_INJECTION_COMPILED', '2026110301');
 
 define('CURRENT_INJECTION_UNCOMPILED', 'none');
 
+// Version des modifications servies par le type "mods" (listes, traductions, patchs ; format AAAAMMJJxx).
+// À incrémenter à chaque changement du dossier injection/compiled/mods/ : les launchers v3 y comparent leur version locale.
+define('CURRENT_MODS_COMPILED', '2026111501');
+
 define('CURRENT_UI_TRAPWORLD', '0000000000');
 define('CURRENT_UI_VANILLA', '0000000000');
 define('CURRENT_UI_VLIK', '0000000000');

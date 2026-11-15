@@ -334,10 +334,8 @@ function serveDataRequest(string $root, string $version, ?string $requestedFile)
     $files = listDataFiles($root);
 
     if ($requestedFile === null) {
-        if (empty($files)) {
-            throw new Exception("Aucun fichier data disponible");
-        }
-
+        // La liste peut être vide : depuis le launcher v3 les .ini sont reconstruits localement (type "mods"),
+        // "data" ne sert plus qu'aux fichiers à remplacer en entier (ex. C_Prestige.ini).
         $list = [];
         foreach ($files as $relative => $absolute) {
             $list[] = [
@@ -387,10 +385,89 @@ function serveDataRequest(string $root, string $version, ?string $requestedFile)
     streamFile($absolute, basename($absolute));
 }
 
+// Fichiers autorisés pour le type "mods" (clé = chemin relatif en minuscules ; la casse d'origine reste sur le disque)
+//   profile.json                  paramètres de colonnes / pipes (mods-profile.json)
+//   c/liste_*.txt                 listes de l'admin pour la reconstruction des C_ (Liste_Model/Item/Enchant/Icone)
+//   t/<langue>/t_*.ini            enregistrements traduits à fusionner dans les T_ du jeu
+//   patches/*.json                modifications ponctuelles (set / upsert / delete ...)
+const MODS_FILE_PATTERN = '#^(profile\.json|c/liste_[a-z_]+\.txt|t/(fr|es|pt|us)/t_[a-z0-9_]+\.ini|patches/[a-z0-9_]+\.json)$#';
+
+/**
+ * Liste les fichiers de mods disponibles sous <injection/compiled>/mods/ : [chemin relatif minuscule => chemin absolu]
+ */
+function listModsFiles(string $root): array
+{
+    $files = [];
+    if (!is_dir($root)) {
+        return $files;
+    }
+
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS)
+    );
+    foreach ($iterator as $fileInfo) {
+        if (!$fileInfo->isFile()) {
+            continue;
+        }
+        $relative = strtolower(str_replace('\\', '/', substr($fileInfo->getPathname(), strlen($root) + 1)));
+        if (preg_match(MODS_FILE_PATTERN, $relative)) {
+            $files[$relative] = $fileInfo->getPathname();
+        }
+    }
+    ksort($files);
+    return $files;
+}
+
+/**
+ * Type "mods" (variant "compiled") :
+ *  - sans "file" : manifeste JSON { version, files: [{ path, size, sha256 }] }
+ *  - avec "file" : contenu brut du fichier demandé (uniquement un fichier du manifeste)
+ * Le launcher télécharge ces fichiers, vérifie le SHA-256 puis reconstruit lui-même les .ini à partir des fichiers
+ * officiels extraits des archives du jeu.
+ */
+function serveModsRequest(string $root, string $version, ?string $requestedFile): void
+{
+    $files = listModsFiles($root);
+
+    if ($requestedFile === null) {
+        if (!isset($files['profile.json'])) {
+            throw new Exception("Aucun fichier mods disponible");
+        }
+
+        $list = [];
+        foreach ($files as $relative => $absolute) {
+            $list[] = [
+                "path" => $relative,
+                "size" => filesize($absolute),
+                "sha256" => hash_file('sha256', $absolute)
+            ];
+        }
+
+        error_log("Mods manifest requested: " . count($list) . " files");
+        sendJsonResponse("success", "Mods manifest", [
+            "version" => $version,
+            "files" => $list
+        ]);
+    }
+
+    // Seuls les fichiers du manifeste peuvent être téléchargés (la clé est comparée en minuscules)
+    $key = strtolower($requestedFile);
+    if (!isset($files[$key])) {
+        throw new Exception("Fichier mods invalide");
+    }
+
+    $absolute = realpath($files[$key]);
+    if ($absolute === false || strpos($absolute, $root) !== 0) {
+        throw new Exception("Chemin invalide");
+    }
+
+    streamFile($absolute, basename($absolute));
+}
+
 try {
     $rawInput = file_get_contents('php://input');
     $data = json_decode($rawInput, true);
-    
+
     if (!is_array($data) || !isset($data['token'], $data['type'], $data['variant'])
         || !is_string($data['token']) || !is_string($data['type']) || !is_string($data['variant'])) {
         throw new Exception("Paramètres manquants");
@@ -424,6 +501,14 @@ try {
         ];
 
         $sourcePath = $basePath . $variantMap[$data['variant']];
+
+    } elseif ($data['type'] === 'mods') {
+        // "mods" = modifications (profil, listes, traductions, patchs) que le launcher applique localement
+        if ($data['variant'] !== 'compiled') {
+            throw new Exception("Variant mods invalide");
+        }
+
+        $sourcePath = $basePath . 'injection/compiled/mods/';
 
     } elseif ($data['type'] === 'injection' || $data['type'] === 'data') {
         // "data" = fichiers .ini bruts (data/db, data/translate) stockés à côté du ZIP d'injection
@@ -463,12 +548,20 @@ try {
             'vlik'       => trim(CURRENT_UI_VLIK),
             'trapworld'  => trim(CURRENT_UI_TRAPWORLD),
         ],
+        'mods' => [
+            'compiled'   => trim(CURRENT_MODS_COMPILED),
+        ],
     ];
 
     $versionKey = $data['type'] === 'data' ? 'injection' : $data['type'];
     $version = $versionMap[$versionKey][$data['variant']] ?? null;
     if (!$version || $version === 'none') {
         throw new Exception("Aucun fichier ZIP trouvé pour ce type/variant");
+    }
+
+    if ($data['type'] === 'mods') {
+        $requestedFile = isset($data['file']) && is_string($data['file']) ? $data['file'] : null;
+        serveModsRequest($realSourcePath, $version, $requestedFile);
     }
 
     if ($data['type'] === 'data') {

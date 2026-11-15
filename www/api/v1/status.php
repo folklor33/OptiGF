@@ -237,6 +237,13 @@ try {
                 "is_up_to_date" => isset($installedVersions['injection_uncompiled'])
                     ? compareVersions($installedVersions['injection_uncompiled'], CURRENT_INJECTION_UNCOMPILED)
                     : null
+            ],
+            // Modifications reconstruites localement par le launcher v3 (type "mods")
+            "mods" => [
+                "current_version" => CURRENT_MODS_COMPILED,
+                "is_up_to_date" => isset($installedVersions['mods_compiled'])
+                    ? compareVersions($installedVersions['mods_compiled'], CURRENT_MODS_COMPILED)
+                    : null
             ]
         ],
         "ui" => [

@@ -1,5 +1,5 @@
 {
-  "$comment": "Profil SERVI par l'API (mods/profile.json) : identique au profil par defaut embarque (mods-profile.json) + les options trimIdNewlines (T_Item : ID precede d'une ligne vide, ex. 16372) et appendMissing (T_PointAbility : ID du mod absent du vanilla, ex. 610). Le profil par defaut reste strictement celui des outils d'origine (test golden).",
+  "$comment": "Profil SERVI par l'API (mods/profile.json) : identique au profil par defaut embarque (mods-profile.json) + les options trimIdNewlines (T_Item : ID precede d'une ligne vide, ex. 16372) et appendMissing (T_PointAbility : ID du mod absent du vanilla, ex. 610), et en bas la liste replaceWhole (fichiers .ini du dossier data/ du serveur injectes en entier, a la place de la reconstruction et des patchs : fichiers officiels errones). Le profil par defaut reste strictement celui des outils d'origine (test golden).",
   "profileVersion": 1,
   "c": {
     "encoding": "big5-dbcs",
@@ -102,7 +102,7 @@
         "trimIdNewlines": true
       },
       {
-        "mod": "T_Mall.ini",
+        "mod": "T_ItemMall.ini",
         "path": "data/translate/{lang}/t_itemmall.ini",
         "pipes": 3
       },
@@ -128,5 +128,10 @@
         "pipes": 2
       }
     ]
-  }
+  },
+  "replaceWhole": [
+    "data/translate/fr/t_item.ini",
+    "data/translate/fr/t_activity.ini",
+    "data/translate/fr/t_collection.ini"
+  ]
 }

@@ -14,8 +14,6 @@ unset($_SESSION['error_message']);
 $successMessage = $_SESSION['success_message'] ?? '';
 unset($_SESSION['success_message']);
 
-// Vérifier si l'utilisateur est connecté
-$isUserLoggedIn = SessionManager::get('user_id') !== null;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -132,14 +130,17 @@ $isUserLoggedIn = SessionManager::get('user_id') !== null;
                             </li>
                         </ul>
 
-                        <p class="lead">Connexion et téléchargement</p>
+                        <p class="lead">Téléchargement et connexion</p>
                         <ul>
-                            <li><strong>Se connecter</strong> au site via la <a href="#account">même page</a>
-                            </li>
-                            <li><strong>Télécharger</strong> l'application "Injecteur OptiGF.exe" <a
-                                    href="injection.php#download">ici</a></li>
-                            <li><strong>Lancer l'app puis s'authentifier</strong> grâce au bouton "Connexion" (API) :
-                                mêmes identifiants que sur le site web </li>
+                            <li><strong>Télécharger</strong> le launcher "OptiGF.exe" <a
+                                    href="injection.php#download">ici</a> : libre, sans connexion au site</li>
+                            <li><strong>Le placer</strong> où vous voulez, idéalement dans le dossier du jeu (il est alors
+                                détecté tout seul). Rien à installer, aucun droit administrateur nécessaire</li>
+                            <li><strong>Lancer l'app</strong> (Windows affiche un avertissement ? voir
+                                <a href="index.php#security">Sécurité</a>) <strong>puis se connecter</strong> : nom
+                                d'utilisateur Discord, mot de passe OptiGF et clé de compte (24 caractères)</li>
+                            <li>Le launcher <strong>se met à jour tout seul</strong> à chaque démarrage : inutile de
+                                retélécharger l'exe à chaque nouvelle version</li>
                         </ul>
 
                         <p class="lead">
@@ -149,12 +150,19 @@ $isUserLoggedIn = SessionManager::get('user_id') !== null;
 
                         </p>
                         <ul>
-                            <li><strong>Sélectionner le dossier</strong> de son GF >> naviguer jusqu'à
-                                "GrandFantasia.exe" (ou un autre nom)</li>
-                            <li><strong>Vérifier l'installation</strong> avec le bouton bleu "OK"</li>
-                            <li><strong>Appliquer</strong> l'injection ou les UI via les boutons correspondants</li>
-                            <li><strong>Attendre</strong> les chargements et <strong>Lancer le jeu</strong> directement
-                                avec le bouton "Start" vert ou en double cliquant sur l'exécutable GrandFantasia.exe</li>
+                            <li><strong>Mettre le jeu à jour</strong> avec le launcher officiel (bouton "Launcher
+                                officiel"), puis le fermer, ainsi que le jeu</li>
+                            <li><strong>Sélectionner le dossier</strong> du jeu s'il n'est pas détecté : "Parcourir..." >>
+                                "GrandFantasia.exe"</li>
+                            <li><strong>Choisir la langue</strong> en haut de la fenêtre (FR, PT, ES, US) : c'est aussi
+                                celle du jeu</li>
+                            <li><strong>Cliquer sur "Injecter"</strong> et patienter jusqu'à la fin (bouton "Logs" pour
+                                suivre le déroulement)</li>
+                            <li><strong>Cliquer sur "Extraire les icônes"</strong> (le bouton s'active après l'injection)
+                                pour éviter les carrés roses</li>
+                            <li><strong>Lancer le jeu</strong> avec le bouton "JOUER" ou directement avec GrandFantasia.exe</li>
+                            <li>Après chaque mise à jour officielle du jeu, <strong>refaire l'injection</strong> : le launcher
+                                vous le signale dans la carte "Injection"</li>
                         </ul>
                     </div>
 
@@ -729,56 +737,51 @@ $isUserLoggedIn = SessionManager::get('user_id') !== null;
 
                 <!-- Téléchargement -->
                 <div id="download-section" class="content-section" style="display: none;">
-                    <?php if ($isUserLoggedIn): ?>
-                        <h2>Télécharger notre application OptiGF</h2>
-                        <p class="lead">Elle vous permet d'accéder à la dernière version de notre injection et au switcher
-                            d'ui</p>
+                    <h2>Télécharger notre application OptiGF</h2>
+                    <p class="lead">Elle vous permet d'accéder à la dernière version de notre injection et au switcher
+                        d'ui</p>
 
-                        <div class="alert alert-info">
-                            <h5><i class="bi bi-info-circle"></i> Instructions</h5>
-                            <p class="mb-0">0. Faites la mise à jour officielle de Grand Fantasia</p>
-                            <p class="mb-0">1. Téléchargez le launcher  OptiGF.exe</p>
-                            <p class="mb-0">2. Exécutez le fichier et connectez-vous à votre compte OptiGF</p>
-                            <p class="mb-0">3. Choisissez le chemin de votre jeu (optionnel : vérifier votre installation)</p>
-                            <p class="mb-0">4. Réalisez l'injection + bouton "icons" afin d'éviter les carrés roses</p>
-                            <p class="mb-0">5. Attendez la fin du téléchargement + extraction des ressources</p>
-                            <p class="mb-0">6. Lancez GrandFantasia.exe directement dans le dossier du jeu ou via le bouton Play de l'application OptiGF</p>
-                        </div>
-                        <div class="w-100 text-center">
-                            <img style="width: 40%;" class="zoomable-image"
-                                src="assets/img/injection/previews/apercu-optigf-exe-3.webp" alt="Apperçu de l'application OptiGF.exe">
-                        </div>
-                        <form method="POST" action="download.exe.php" class="text-center mt-4">
-                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-                            <button type="submit" class="btn btn-custom-success btn-lg">
-                                Télécharger
-                            </button>
-                            <p class="text-muted mt-3">
-                                <span><?= CURRENT_APP_VERSION ?> | Taille : ~1,5 Mo</span><br>
-                            </p>
-
-                        <p class="text-muted mt-3">
-                            <span>Fichiers de l'injection: v<?= CURRENT_INJECTION_COMPILED ?> | Taille : ~220 Mo</span>
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle"></i> Instructions</h5>
+                        <p class="mb-0">0. Faites la mise à jour officielle de Grand Fantasia (launcher officiel), puis
+                            fermez-le ainsi que le jeu</p>
+                        <p class="mb-0">1. Téléchargez le launcher OptiGF.exe (aucune connexion au site n'est nécessaire)
                         </p>
-                        </form>
+                        <p class="mb-0">2. Placez-le où vous voulez (idéalement dans le dossier du jeu), puis lancez-le :
+                            rien à installer, pas de droits administrateur</p>
+                        <p class="mb-0">3. Connectez-vous avec votre compte OptiGF (pas encore de compte ? voir
+                            <a href="index.php#account">Compte</a>)</p>
+                        <p class="mb-0">4. Choisissez le dossier du jeu s'il n'est pas détecté et la langue (FR, PT, ES,
+                            US), qui sera aussi celle du jeu</p>
+                        <p class="mb-0">5. Cliquez sur "Injecter" et patientez jusqu'à la fin</p>
+                        <p class="mb-0">6. Cliquez sur "Extraire les icônes" (disponible après l'injection) afin
+                            d'éviter les carrés roses</p>
+                        <p class="mb-0">7. Lancez le jeu avec le bouton "JOUER" de l'application ou GrandFantasia.exe
+                            dans le dossier du jeu</p>
+                    </div>
 
-                    <?php else: ?>
-                        <div class="download-section-locked">
-                            <h2>Télécharger notre application OptiGF</h2>
-                            <p class="lead">Section réservée aux membres connectés...</p>
+                    <div class="alert alert-secondary">
+                        <h5><i class="bi bi-arrow-repeat"></i> Mises à jour</h5>
+                        <p class="mb-0">- Le launcher se met à jour tout seul à son démarrage : vous n'aurez plus à
+                            retélécharger ce fichier.</p>
+                        <p class="mb-0">- Après chaque mise à jour officielle du jeu, refaites simplement l'injection : le
+                            launcher vous le signale.</p>
+                        <p class="mb-0">- Windows bloque ou avertit à l'ouverture ? C'est normal pour un projet
+                            communautaire : consultez la section <a href="index.php#security">Sécurité</a>.</p>
+                    </div>
 
-                            <div class="alert alert-warning">
-                                <h5>⚠️ Accès restreint ⚠️</h5>
-                                <p class="mb-0">Vous devez être connecté pour accéder aux téléchargements.</p>
-                            </div>
-
-                            <div class="text-center mt-4">
-                                <a href="#account" class="btn btn-custom-success btn-lg">
-                                    Se connecter
-                                </a>
-                            </div>
-                        </div>
-                    <?php endif; ?>
+                    <div class="w-100 text-center">
+                        <img style="width: 40%;" class="zoomable-image"
+                            src="assets/img/injection/previews/apercu-optigf-exe-3.webp" alt="Apperçu de l'application OptiGF.exe">
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="download.exe.php" class="btn btn-custom-success btn-lg" rel="nofollow">
+                            Télécharger
+                        </a>
+                        <p class="text-muted mt-3">
+                            <span><?= htmlspecialchars(CURRENT_APP_VERSION) ?> | Taille : ~1,5 Mo</span><br>
+                        </p>
+                    </div>
                 </div>
 
 

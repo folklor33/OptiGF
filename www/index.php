@@ -335,9 +335,11 @@ if (isset($_GET['logout']) && $isUserLoggedIn) {
                             <div id="faqCollapseInjection1" class="accordion-collapse collapse"
                                 aria-labelledby="faqHeadingInjection1" data-bs-parent="#faqAccordionInjection">
                                 <div class="accordion-body">
-                                    Pour des raisons de sécurité et de gestion des utilisateurs. La Clé de Carso assure
-                                    une authentification par intermédiaire (compte Discord) vous évitant ainsi d'avoir à
-                                    renseigner une adresse e-mail.
+                                    Le launcher se télécharge librement, mais il ne fonctionne qu'une fois connecté à
+                                    votre compte OptiGF : toutes les modifications sont servies par nos serveurs. Le compte
+                                    est demandé pour des raisons de sécurité et de gestion des utilisateurs. La Clé de Carso
+                                    assure une authentification par intermédiaire (compte Discord) vous évitant ainsi d'avoir
+                                    à renseigner une adresse e-mail.
                                 </div>
                             </div>
                         </div>
@@ -354,10 +356,11 @@ if (isset($_GET['logout']) && $isUserLoggedIn) {
                             <div id="faqCollapseInjection2" class="accordion-collapse collapse"
                                 aria-labelledby="faqHeadingInjection2" data-bs-parent="#faqAccordionInjection">
                                 <div class="accordion-body">
-                                    Oui, mais vous ne pourrez pas bénéficier des traductions améliorées qui sont pour
-                                    l'instant uniquement présentes dans la version FR.
-                                    <br>Les autres modifications (icônes, monstres, modèles de coffre, ...) seront quant
-                                    à elles bien fonctionnelles !
+                                    Oui. Le launcher est disponible en français, portugais, espagnol et anglais (US) : la
+                                    langue choisie en haut de sa fenêtre est aussi celle de votre jeu.
+                                    <br>Les traductions améliorées ne sont pour l'instant disponibles qu'en français ; les
+                                    autres modifications (icônes, monstres, modèles de coffre, ...) fonctionnent dans
+                                    toutes les langues !
                                 </div>
                             </div>
                         </div>
@@ -394,43 +397,30 @@ if (isset($_GET['logout']) && $isUserLoggedIn) {
                             <div id="faqCollapseInjection4" class="accordion-collapse collapse"
                                 aria-labelledby="faqHeadingInjection4" data-bs-parent="#faqAccordionInjection">
                                 <div class="accordion-body">
-                                    <p class="text-justify">Le launcher officiel de X-Legend sert à télécharger le
-                                        contenu fraichement
-                                        sorti.<br>
-                                        Notre injection n'inclus pas ces modifications (nouveaux items, pnj etc,...).
-                                        Donc chaque semaine il faut relancer le launcher officiel et refaire l'injection
-                                        dès que nous publions le nouveau contenu.</p>
+                                    <p class="text-justify">Oui, et toujours <strong>avant</strong> l'injection. Le
+                                        launcher officiel de X-Legend télécharge le contenu fraîchement sorti (nouveaux
+                                        items, pnj, ...) et annule au passage nos modifications.</p>
 
                                     <p class="text-justify">
-                                        Cependant, si la mise à jour de l'injection n'a pas encore été réalisée,
-                                        vous pourrez constater quelques anomalies.<br>
-                                        Ainsi deux possibilités s'offrent à vous :
-                                    </p>
-
-                                    <p class="text-justify">
-                                        (1) Vous êtes patient et attendez que nous vous informions d'une mise à jour
-                                        OptiGF pour lancer le launcher X-Legend.
-                                        Vous prenez alors le risque de ne pas profiter du nouveau contenu. Une fois que
-                                        nous aurons publié la nouvelle version de l'injection, il faudra retourner dans
-                                        l'application et télécharger de nouveaux nos modifs.<br>
-                                        <em>En cas de blocage car grosse MAJ X-Legend : optez pour la solution (2)</em>
+                                        La procédure est simple :<br>
+                                        (1) Lancez le launcher officiel (bouton "Launcher officiel" de notre application)
+                                        et laissez-le mettre le jeu à jour, puis fermez-le, ainsi que le jeu.<br>
+                                        (2) Dans le launcher OptiGF, cliquez sur "Injecter", puis sur "Extraire les icônes".
                                     </p>
 
                                     <p class="text-justify">
-                                        (2) Vous préférez bénéficier des ajouts X-Legend et lancez
-                                        le launcher officiel dès la MAJ. La
-                                        quasi-totalité des changements que nous proposons seront alors annulés en
-                                        attendant que nous publions la nouvelle version de l'injection. Alors à
-                                        vous de choisir !
+                                        Plus besoin d'attendre une nouvelle version de l'injection : le launcher OptiGF
+                                        reconstruit les fichiers modifiés directement à partir des fichiers officiels à jour
+                                        de votre jeu. Vous profitez donc du nouveau contenu X-Legend <em>et</em> de nos
+                                        modifications dès la mise à jour officielle.
                                     </p>
-                                    <br><br>
-                                    <p class="text-justify"><span class="text-decoration-underline">
-                                            Conseil du staff</span> : installer GF dans deux dossiers différents.
-                                        Cela vous permettra d'utiliser la version officielle pendant la période ouleuse.
-                                    </p>
-                                    <p class="text-justify">Nous faisons le maximum pour publier les mises à jour le
-                                        plus rapidement
-                                        possible.
+
+                                    <p class="text-justify">
+                                        Le launcher détecte aussi quand le launcher officiel a mis le jeu à jour et vous
+                                        demande de refaire l'injection (carte "Injection").<br>
+                                        <em>Cas rare : si X-Legend change le format d'un fichier, l'injection s'arrête sans
+                                            rien modifier jusqu'à ce que nous l'adaptions. Votre jeu reste alors
+                                            jouable en version officielle.</em>
                                     </p>
                                 </div>
                             </div>
@@ -449,9 +439,10 @@ if (isset($_GET['logout']) && $isUserLoggedIn) {
                             <div id="faqCollapseInjection5" class="accordion-collapse collapse"
                                 aria-labelledby="faqHeadingInjection5" data-bs-parent="#faqAccordionInjection">
                                 <div class="accordion-body">
-                                    Pas de panique ! Dans ce cas vous pouvez utilisez le bouton "Icons" dans notre
-                                    application. Cette opération est indépendante de l'Injection et n'est à effectuer
-                                    qu'une seule fois.
+                                    Pas de panique ! Cliquez sur le bouton "Extraire les icônes" de notre application :
+                                    il copie les icônes du jeu dans UI\itemicon et UI\skillicon. Ce bouton ne s'active
+                                    qu'après une injection réussie (dans la même session et pour le même dossier de jeu) :
+                                    injectez d'abord, puis extrayez les icônes.
                                 </div>
                             </div>
                         </div>
@@ -468,10 +459,53 @@ if (isset($_GET['logout']) && $isUserLoggedIn) {
                             <div id="faqCollapseInjection6" class="accordion-collapse collapse"
                                 aria-labelledby="faqHeadingInjection6" data-bs-parent="#faqAccordionInjection">
                                 <div class="accordion-body">
-                                    Tout le processus est expliqué en détail dans la section
-                                    <a href="injection.php">Injection</a> du site.
+                                    Créez votre <a href="index.php#account">compte</a>, téléchargez le launcher depuis la
+                                    section <a href="injection.php#download">Téléchargement</a> (aucune connexion au site
+                                    n'est nécessaire pour cela), puis connectez-vous dans l'application. Tout le processus
+                                    est expliqué en détail dans la section <a href="injection.php">Injection</a> du site.
+                                </div>
+                            </div>
+                        </div>
 
+                        <!-- Question injection numéro 7 -->
+                        <div class="accordion-item">
+                            <h4 class="accordion-header" id="faqHeadingInjection7">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapseInjection7" aria-expanded="false"
+                                    aria-controls="faqCollapseInjection7">
+                                    Dois-je retélécharger le launcher à chaque nouvelle version ?
+                                </button>
+                            </h4>
+                            <div id="faqCollapseInjection7" class="accordion-collapse collapse"
+                                aria-labelledby="faqHeadingInjection7" data-bs-parent="#faqAccordionInjection">
+                                <div class="accordion-body">
+                                    <p class="text-justify">Non : le launcher vérifie sa version à chaque démarrage et se
+                                        met à jour tout seul (téléchargement, vérification de l'intégrité du fichier, puis
+                                        redémarrage). Les anciennes versions ne sont plus acceptées par nos serveurs.</p>
+                                    <p class="text-justify mb-0">Si la mise à jour automatique est impossible (par exemple
+                                        si le launcher est rangé dans un dossier protégé comme "Program Files"), il vous
+                                        propose la page de <a href="injection.php#download">téléchargement</a> :
+                                        remplacez alors l'ancien fichier par le nouveau, ou déplacez le launcher dans un
+                                        dossier qui vous appartient (le dossier du jeu, par exemple).</p>
+                                </div>
+                            </div>
+                        </div>
 
+                        <!-- Question injection numéro 8 -->
+                        <div class="accordion-item">
+                            <h4 class="accordion-header" id="faqHeadingInjection8">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapseInjection8" aria-expanded="false"
+                                    aria-controls="faqCollapseInjection8">
+                                    Le programme ne s'ouvre pas / Windows affiche un avertissement
+                                </button>
+                            </h4>
+                            <div id="faqCollapseInjection8" class="accordion-collapse collapse"
+                                aria-labelledby="faqHeadingInjection8" data-bs-parent="#faqAccordionInjection">
+                                <div class="accordion-body">
+                                    C'est normal pour un projet communautaire dont le launcher n'est pas signé par un
+                                    certificat commercial. Toutes les explications (et comment débloquer le fichier) sont
+                                    dans la section <a href="index.php#security">Sécurité</a>.
                                 </div>
                             </div>
                         </div>
@@ -482,6 +516,157 @@ if (isset($_GET['logout']) && $isUserLoggedIn) {
                     <p class="mt-5">Votre question reste sans réponse ? Contactez-nous par <a target="_blank"
                             rel="noopener noreferrer" href="https://discord.gg/58j4JnYFdz">Discord</a></p>
 
+                </div>
+
+                <!-- Section Sécurité -->
+                <div id="security-section" class="content-section" style="display: none;">
+                    <h2>Sécurité</h2>
+                    <p class="lead">Le launcher OptiGF est un projet communautaire : voici pourquoi Windows peut s'en
+                        méfier, et comment l'utiliser sereinement.</p>
+
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-shield-check"></i> Un projet communautaire, gratuit et non certifié</h5>
+                        <p class="mb-0 text-justify">OptiGF est développé bénévolement et distribué gratuitement. Le
+                            launcher est signé avec un certificat <strong>autosigné</strong> au nom d'"OptiGF", et non avec
+                            un certificat commercial reconnu par Microsoft (plusieurs centaines d'euros par an). Windows ne
+                            peut donc pas confirmer l'identité de l'éditeur : il affiche "Éditeur inconnu" et peut bloquer
+                            le premier lancement. Cela ne signifie pas que le fichier est dangereux, seulement qu'il n'est
+                            pas encore connu de Windows.</p>
+                    </div>
+
+                    <div class="alert alert-danger">
+                        <strong>Téléchargez le launcher uniquement depuis <a href="injection.php#download">optigf.eu</a>.</strong>
+                        Ne lancez jamais un "OptiGF.exe" reçu par message privé ou trouvé sur un autre site, et n'acceptez
+                        aucune offre payante : le projet est gratuit.
+                    </div>
+
+                    <div class="accordion mb-5" id="faqAccordionSecurity">
+
+                        <!-- SmartScreen -->
+                        <div class="accordion-item">
+                            <h4 class="accordion-header" id="faqHeadingSecurity1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapseSecurity1" aria-expanded="false"
+                                    aria-controls="faqCollapseSecurity1">
+                                    "Windows a protégé votre ordinateur" (fenêtre bleue SmartScreen)
+                                </button>
+                            </h4>
+                            <div id="faqCollapseSecurity1" class="accordion-collapse collapse"
+                                aria-labelledby="faqHeadingSecurity1" data-bs-parent="#faqAccordionSecurity">
+                                <div class="accordion-body">
+                                    <p class="text-justify">SmartScreen bloque par défaut les programmes téléchargés
+                                        dont l'éditeur n'est pas certifié. Pour lancer le launcher :</p>
+                                    <ol>
+                                        <li>cliquez sur <strong>"Informations complémentaires"</strong> ;</li>
+                                        <li>vérifiez que le fichier s'appelle bien OptiGF (téléchargé depuis optigf.eu) ;</li>
+                                        <li>cliquez sur <strong>"Exécuter quand même"</strong>.</li>
+                                    </ol>
+                                    <p class="text-justify mb-0">En principe, cet avertissement n'apparaît qu'au premier
+                                        lancement du fichier téléchargé. Les mises à jour automatiques du launcher ne le
+                                        déclenchent pas : la nouvelle version est téléchargée et vérifiée par le launcher
+                                        lui-même.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ne s'ouvre pas -->
+                        <div class="accordion-item">
+                            <h4 class="accordion-header" id="faqHeadingSecurity2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapseSecurity2" aria-expanded="false"
+                                    aria-controls="faqCollapseSecurity2">
+                                    Le programme ne s'ouvre pas (rien ne se passe, fichier supprimé, accès refusé)
+                                </button>
+                            </h4>
+                            <div id="faqCollapseSecurity2" class="accordion-collapse collapse"
+                                aria-labelledby="faqHeadingSecurity2" data-bs-parent="#faqAccordionSecurity">
+                                <div class="accordion-body">
+                                    <ul>
+                                        <li><strong>Fichier bloqué par Windows</strong> : clic droit sur le fichier >
+                                            Propriétés > cochez <strong>"Débloquer"</strong> en bas de l'onglet Général >
+                                            OK, puis relancez-le.</li>
+                                        <li><strong>Fichier mis en quarantaine par l'antivirus</strong> : les programmes
+                                            protégés contre la décompilation et qui modifient les fichiers d'un jeu sont
+                                            souvent signalés à tort (faux positif). Dans Sécurité Windows > Protection
+                                            contre les virus et menaces > Historique de protection, restaurez le fichier,
+                                            puis ajoutez une exclusion pour celui-ci (ou pour son dossier).
+                                            <em>Ne le faites que pour un fichier téléchargé depuis optigf.eu.</em></li>
+                                        <li><strong>Dossier protégé</strong> : le launcher fonctionne sans droits
+                                            administrateur. Évitez de le placer (ainsi que le jeu) dans "Program Files" :
+                                            placez-le par exemple dans le dossier du jeu, où il est détecté tout seul.</li>
+                                        <li><strong>Composant manquant</strong> : le launcher utilise le .NET Framework 4.8,
+                                            déjà présent sur Windows 10 et 11. Sur un système plus ancien, installez-le
+                                            depuis le site de Microsoft.</li>
+                                    </ul>
+                                    <p class="mb-0">Toujours bloqué ? Contactez-nous sur <a target="_blank"
+                                            rel="noopener noreferrer" href="https://discord.gg/58j4JnYFdz">Discord</a> avec une
+                                        capture du message d'erreur.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Authenticité -->
+                        <div class="accordion-item">
+                            <h4 class="accordion-header" id="faqHeadingSecurity3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapseSecurity3" aria-expanded="false"
+                                    aria-controls="faqCollapseSecurity3">
+                                    Comment vérifier que mon launcher est authentique ?
+                                </button>
+                            </h4>
+                            <div id="faqCollapseSecurity3" class="accordion-collapse collapse"
+                                aria-labelledby="faqHeadingSecurity3" data-bs-parent="#faqAccordionSecurity">
+                                <div class="accordion-body">
+                                    <ul class="mb-0">
+                                        <li>Téléchargez-le uniquement depuis la section
+                                            <a href="injection.php#download">Téléchargement</a> du site.</li>
+                                        <li>Clic droit sur le fichier > Propriétés > onglet <strong>"Signatures
+                                                numériques"</strong> : le signataire doit être <strong>OptiGF</strong>. Windows
+                                            indique que le certificat n'est pas approuvé : c'est attendu pour un certificat
+                                            autosigné.</li>
+                                        <li>Les mises à jour automatiques sont vérifiées par le launcher lui-même avant
+                                            d'être installées : intégrité du fichier (empreinte SHA-256 fournie par nos
+                                            serveurs), version plus récente et signature intacte du même certificat OptiGF.
+                                            Un fichier altéré est refusé.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ce que fait le launcher -->
+                        <div class="accordion-item">
+                            <h4 class="accordion-header" id="faqHeadingSecurity4">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faqCollapseSecurity4" aria-expanded="false"
+                                    aria-controls="faqCollapseSecurity4">
+                                    Que fait le launcher sur mon PC ?
+                                </button>
+                            </h4>
+                            <div id="faqCollapseSecurity4" class="accordion-collapse collapse"
+                                aria-labelledby="faqHeadingSecurity4" data-bs-parent="#faqAccordionSecurity">
+                                <div class="accordion-body">
+                                    <ul class="mb-0">
+                                        <li>Il ne communique qu'avec optigf.eu : connexion, vérification et mise à jour
+                                            du launcher, téléchargement des modifications.</li>
+                                        <li>Il n'envoie <strong>aucun fichier</strong> de votre jeu ni de votre PC.</li>
+                                        <li>Il ne demande <strong>aucun droit administrateur</strong> et ne s'installe pas :
+                                            c'est un simple fichier, que vous pouvez supprimer à tout moment.</li>
+                                        <li>Dans le dossier du jeu choisi, il ne modifie que les archives du jeu (textes et
+                                            données modifiés), les icônes de l'interface (UI) et les réglages de client.ini.
+                                            Il garde ailleurs un cache de téléchargement (%LocalAppData%\OptiGF) et ses
+                                            réglages (%AppData%\OptiGF), et remplace son propre fichier lors des mises à
+                                            jour.</li>
+                                        <li>"Se souvenir de moi" garde vos identifiants chiffrés pour votre session
+                                            Windows (%AppData%\OptiGF) ; ils ne servent qu'à vous connecter à optigf.eu.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <p>Une question de sécurité ou un fichier suspect à signaler ? Contactez-nous par <a target="_blank"
+                            rel="noopener noreferrer" href="https://discord.gg/58j4JnYFdz">Discord</a>.</p>
                 </div>
 
                 <!-- Section À propos -->

@@ -13,6 +13,10 @@
 			"name": "F.A.Q."
 		},
 		{
+			"id": "security",
+			"name": "Sécurité"
+		},
+		{
 			"id": "about",
 			"name": "À propos"
 		}

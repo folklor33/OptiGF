@@ -620,14 +620,19 @@ if (isset($_GET['logout']) && $isUserLoggedIn) {
                                     <ul class="mb-0">
                                         <li>Téléchargez-le uniquement depuis la section
                                             <a href="injection.php#download">Téléchargement</a> du site.</li>
-                                        <li>Clic droit sur le fichier > Propriétés > onglet <strong>"Signatures
-                                                numériques"</strong> : le signataire doit être <strong>OptiGF</strong>. Windows
-                                            indique que le certificat n'est pas approuvé : c'est attendu pour un certificat
-                                            autosigné.</li>
+                                        <li><strong>Comparez son empreinte SHA-256</strong> avec celle affichée sous le bouton
+                                            de <a href="injection.php#download">téléchargement</a> : dans PowerShell, tapez
+                                            <code>Get-FileHash .\OptiGF.exe</code> (depuis le dossier du fichier). Les deux
+                                            valeurs doivent être identiques ; la moindre modification du fichier change
+                                            l'empreinte.</li>
+                                        <li>L'onglet "Signatures numériques" (clic droit > Propriétés) indique un signataire
+                                            "OptiGF" non approuvé par Windows : c'est attendu, le certificat est autosigné et
+                                            renouvelé à chaque version. Il ne prouve pas à lui seul l'origine du fichier :
+                                            fiez-vous à l'empreinte.</li>
                                         <li>Les mises à jour automatiques sont vérifiées par le launcher lui-même avant
-                                            d'être installées : intégrité du fichier (empreinte SHA-256 fournie par nos
-                                            serveurs), version plus récente et signature intacte du même certificat OptiGF.
-                                            Un fichier altéré est refusé.</li>
+                                            d'être installées : le fichier doit avoir exactement l'empreinte publiée par nos
+                                            serveurs, ne pas être plus ancien et porter une signature intacte. Un fichier
+                                            différent ou altéré est refusé.</li>
                                     </ul>
                                 </div>
                             </div>

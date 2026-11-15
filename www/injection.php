@@ -780,6 +780,10 @@ unset($_SESSION['success_message']);
                         </a>
                         <p class="text-muted mt-3">
                             <span><?= htmlspecialchars(CURRENT_APP_VERSION) ?> | Taille : ~1,5 Mo</span><br>
+                            <?php if (defined('CURRENT_APP_SHA256') && CURRENT_APP_SHA256 !== ''): ?>
+                                <small>SHA-256 : <code class="user-select-all text-break"><?= htmlspecialchars(CURRENT_APP_SHA256) ?></code>
+                                    (<a href="index.php#security">vérifier</a>)</small>
+                            <?php endif; ?>
                         </p>
                     </div>
                 </div>

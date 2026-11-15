@@ -218,21 +218,21 @@ try {
     });
 
     if (!empty($missingFields)) {
-        throw new Exception("Champs manquants: " . implode(', ', $missingFields));
+        throw new LoginException('bad_request', "Champs manquants : " . implode(', ', $missingFields));
     }
 
     // Validation du format des données
 
     if (strlen($data['discord']) > 32 || !preg_match('/^[a-zA-Z0-9_.-]{2,32}$/', $data['discord'])) {
-        throw new Exception("Format Discord invalide");
+        throw new LoginException('bad_request', "Format du nom Discord invalide");
     }
 
     if (strlen($data['account_key']) !== 24 || !ctype_alnum($data['account_key'])) {
-        throw new Exception("Format de cle invalide");
+        throw new LoginException('bad_request', "Format de la clé de compte invalide");
     }
 
     if (strlen($data['password']) > MAX_PASSWORD_LENGTH) {
-        throw new Exception("Mot de passe trop long");
+        throw new LoginException('bad_request', "Mot de passe trop long");
     }
 
     // Nettoyage des données
@@ -243,19 +243,7 @@ try {
     $db = DatabaseManager::getInstance()->getConnection();
 
     try {
-        // Vérification des credentials
-        $stmt = $db->prepare("SELECT id, token FROM users 
-            WHERE discord = ? 
-            AND account_key = ?");
-
-        $stmt->execute([$data['discord'], $data['account_key']]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$user) {
-            throw new Exception("Identifiants incorrects");
-        }
-
-        // Vérification du mot de passe
+        // Vérification des identifiants (combinaison clé / Discord, puis mot de passe) : LoginException avec un code précis
         $result = $userManager->login($data['discord'], $data['password'], $data['account_key']);
 
         if ($result) {
@@ -272,14 +260,25 @@ try {
                 "token" => $result['token']
             ]);
         } else {
-            throw new Exception("Identifiants invalides");
+            throw new LoginException('invalid_password', "Identifiants invalides");
         }
     } catch (PDOException $e) {
         error_log("Erreur DB: " . $e->getMessage());
         throw new Exception("Erreur serveur");
     }
 
+} catch (LoginException $e) {
+    // Échec attendu : message et code destinés à l'utilisateur (le launcher traduit le code dans sa langue).
+    // Même politique que le site, qui affiche déjà ces messages à la connexion.
+    error_log(sprintf("Connexion refusée (%s) - Discord: %s, IP: %s", $e->reason, $data['discord'] ?? '?', getClientIp()));
+    $extra = ["error" => $e->reason];
+    if ($e->retryAfter > 0) {
+        $extra["retry_after"] = $e->retryAfter;
+    }
+    sendJsonResponse("error", $e->getMessage(), $extra);
+
 } catch (Throwable $e) {
+    // Erreur interne (base de données, imprévu) : détail masqué en production
     // On vérifie d'abord si la constante est définie
     $isProduction = defined('ENVIRONMENT') && ENVIRONMENT === 'production';
 
@@ -293,5 +292,5 @@ try {
         getClientIp()
     ));
 
-    sendJsonResponse("error", $errorMessage);
+    sendJsonResponse("error", $errorMessage, ["error" => "server_error"]);
 }

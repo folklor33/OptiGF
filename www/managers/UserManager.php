@@ -5,7 +5,23 @@ require_once 'config.php';
 require_once 'SystemManagers.php';
 require_once 'SecurityManager.php';
 
+/**
+ * Échec de connexion attendu (identifiants, compte, limite de tentatives) : le message est destiné à l'utilisateur et
+ * $reason est un code stable que l'API renvoie au launcher (champ "error") pour afficher un texte dans sa langue.
+ * Hérite d'Exception : le site, qui attrape Exception et affiche getMessage(), n'est pas modifié.
+ */
+class LoginException extends Exception
+{
+    public string $reason;
+    public int $retryAfter;
 
+    public function __construct(string $reason, string $message, int $retryAfter = 0)
+    {
+        parent::__construct($message);
+        $this->reason = $reason;
+        $this->retryAfter = $retryAfter;
+    }
+}
 
 class UserManager
 {
@@ -232,7 +248,7 @@ class UserManager
             // Rate limiting
             if ($this->security->isRateLimited($_SERVER['REMOTE_ADDR'])) {
                 $retryAfter = $this->security->getRetryAfter($_SERVER['REMOTE_ADDR']);
-                throw new Exception("Trop de tentatives. Réessayez dans {$retryAfter} secondes.");
+                throw new LoginException('rate_limited', "Trop de tentatives. Réessayez dans {$retryAfter} secondes.", $retryAfter);
             }
 
             $discord = SecurityManager::sanitizeInput($discord);
@@ -248,18 +264,18 @@ class UserManager
             if (!$user) {
                 error_log("Failed login attempt for discord: " . $discord);
                 sleep($randomDelay);
-                throw new Exception("Combinaison 'Clé / Discord' invalide. Veuillez réessayer.");
+                throw new LoginException('invalid_key_discord', "Combinaison 'Clé / Discord' invalide. Veuillez réessayer.");
             }
 
             if (!$user['password']) {
                 sleep($randomDelay);
-                throw new Exception("Mot de passe non défini. Veuillez configurer votre compte.");
+                throw new LoginException('password_not_set', "Mot de passe non défini. Veuillez configurer votre compte.");
             }
 
             if (!$this->verifyPassword($password, $user['password'])) {
                 $this->logActivity($user['id'], 'failed_login');
                 sleep($randomDelay);
-                throw new Exception("Mot de passe incorrect. Veuillez réessayer.");
+                throw new LoginException('invalid_password', "Mot de passe incorrect. Veuillez réessayer.");
             }
 
             // Régénérer le token de session

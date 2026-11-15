@@ -323,8 +323,8 @@ function listNewFileNames(string $root): array
 
 /**
  * Type "data" :
- *  - sans "file" : manifeste JSON { version, files: [{ path, size, crc32, sha256 }], version_xml_b64, client_ini_b64, new_files: [chemin] }
- *    (version_xml_b64 : data/_OptiGF_Launcher_Injection.xml ; client_ini_b64 : client.ini à la racine du dossier)
+ *  - sans "file" : manifeste JSON { version, files: [{ path, size, crc32, sha256 }], client_ini_b64, new_files: [chemin] }
+ *    (version : celle du ZIP d'injection, simple clé de cache pour le launcher ; client_ini_b64 : client.ini à la racine du dossier)
  *    (new_files : contenu de data/manifest.txt, fichiers livrés par le ZIP à injecter dans les archives)
  *    (crc32 = CRC32 du contenu brut, celui que le jeu stocke dans pkg.idx)
  *  - avec "file" : contenu brut du fichier demandé (non zippé)
@@ -346,12 +346,6 @@ function serveDataRequest(string $root, string $version, ?string $requestedFile)
             ];
         }
 
-        // _OptiGF_Launcher_Injection.xml : sert au launcher à savoir si la version injectée est à jour
-        $versionXml = $root . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . '_OptiGF_Launcher_Injection.xml';
-        $versionXmlB64 = (is_file($versionXml) && filesize($versionXml) <= 65536)
-            ? base64_encode(file_get_contents($versionXml))
-            : null;
-
         // client.ini : placé à la racine du dossier (<injection/variant>/client.ini), il remplace celui du jeu à chaque injection
         $clientIniB64 = null;
         foreach (scandir($root) as $entry) {
@@ -366,7 +360,6 @@ function serveDataRequest(string $root, string $version, ?string $requestedFile)
         sendJsonResponse("success", "Data manifest", [
             "version" => $version,
             "files" => $list,
-            "version_xml_b64" => $versionXmlB64,
             "client_ini_b64" => $clientIniB64,
             "new_files" => listNewFileNames($root)
         ]);
@@ -537,11 +530,13 @@ try {
         throw new Exception("Chemin invalide");
     }
 
-    // Map des constantes de version selon type + variant
+    // Map des constantes de version selon type + variant.
+    // injection / ui : nom du ZIP sur le serveur (<version>.zip), changé par l'admin quand il remplace le ZIP ;
+    // mods : version des modifications (dossier de cache des launchers). Ces versions sont indépendantes.
     $versionMap = [
         'injection' => [
-            'compiled'   => trim(CURRENT_INJECTION_COMPILED),
-            'uncompiled' => trim(CURRENT_INJECTION_UNCOMPILED),
+            'compiled'   => trim(CURRENT_INJECTION_ZIP_COMPILED),
+            'uncompiled' => trim(CURRENT_INJECTION_ZIP_UNCOMPILED),
         ],
         'ui' => [
             'vanilla'    => trim(CURRENT_UI_VANILLA),

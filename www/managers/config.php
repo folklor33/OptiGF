@@ -39,12 +39,18 @@ define('FILENAME', "OptiGF.exe");
 // Un launcher dont l'empreinte est égale à celle-ci se considère à jour, quelle que soit CURRENT_APP_VERSION (pas de boucle).
 define('CURRENT_APP_SHA256', '');
 
-define('CURRENT_INJECTION_UNCOMPILED', 'none');
+// ZIP d'injection (icônes, polices, GF_61Hz... : ressources non reconstruites par le launcher), servi par download.php
+// sous le nom injection/<variant>/<version>.zip. Format AAAAMMJJxx = date d'ajout du ZIP. Indépendant de CURRENT_MODS_COMPILED :
+// pour publier un nouveau ZIP, le déposer sous un nouveau nom puis changer cette valeur.
+define('CURRENT_INJECTION_ZIP_COMPILED', '2026110301');
+define('CURRENT_INJECTION_ZIP_UNCOMPILED', 'none');
 
 // Version des modifications servies par le type "mods" (listes, traductions, patchs ; format AAAAMMJJxx).
-// À incrémenter à chaque changement du dossier injection/compiled/mods/ : les launchers v3 y comparent leur version locale.
+// À incrémenter à chaque publication du dossier injection/compiled/mods/ : version affichée par le launcher et nom de son cache local
+// (les fichiers modifiés sont de toute façon retéléchargés : leur SHA-256 est recalculé à chaque requête).
 define('CURRENT_MODS_COMPILED', '2026111501');
 
+// ZIP des UI (ui/<variant>/<version>.zip), même principe que les ZIP d'injection
 define('CURRENT_UI_TRAPWORLD', '0000000000');
 define('CURRENT_UI_VANILLA', '0000000000');
 define('CURRENT_UI_VLIK', '0000000000');

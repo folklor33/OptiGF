@@ -1,132 +1,65 @@
 <?php
 // SecureDownloadManager.php
+//
+// Téléchargement PUBLIC de l'exe du launcher OptiGF : aucune connexion au site n'est demandée.
+// Il sert à la fois le bouton « Télécharger » du site et la mise à jour automatique du launcher
+// (api/v1/version.php publie l'URL, le SHA-256 et la taille de ce fichier).
+// Le launcher reste inutilisable sans compte OptiGF : la connexion se fait dans l'application (api/v1/connect.php).
 
-require_once 'config.php';
-require_once 'SecurityManager.php';
-require_once 'SystemManagers.php';
-ini_set('memory_limit', '256M');
-SessionManager::start();
+require_once __DIR__ . '/config.php';
 
 class SecureDownloadManager
 {
-    private const ALLOWED_MIME_TYPES = ['application/exe'];
+    /** URL publique de l'exe (le launcher n'accepte que des URL https://optigf.eu/...). */
+    public const PUBLIC_URL = 'https://optigf.eu/download.exe.php';
 
-    private $db;
-
-    public function __construct()
+    /** Chemin de l'exe courant sur le serveur, ou null s'il est absent. */
+    public static function exePath(): ?string
     {
-        $this->db = DatabaseManager::getInstance()->getConnection();
+        // basename : FILENAME ne peut pas sortir du dossier exe/
+        $path = DOWNLOAD_PATH . 'exe/' . basename(FILENAME);
+        return is_file($path) ? $path : null;
     }
 
-    public function verifyAccess()
+    /**
+     * Informations publiées par api/v1/version.php pour la mise à jour automatique :
+     * le launcher vérifie la taille et le SHA-256 du fichier téléchargé avant de le mettre à la place de son exe.
+     */
+    public static function exeInfo(): ?array
     {
-        // Vérifier si l'utilisateur est connecté et a un token valide
-        if (!isset($_SESSION['user_id']) || !isset($_SESSION['token'])) {
-            throw new Exception('Accès non autorisé');
+        $path = self::exePath();
+        if ($path === null) {
+            return null;
         }
-
-        $stmt = $this->db->prepare("
-        SELECT token, last_download, vip 
-        FROM users 
-        WHERE id = ? AND token = ? AND password IS NOT NULL
-    ");
-        $stmt->execute([$_SESSION['user_id'], $_SESSION['token']]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Vérifier la validité du token
-        if (!$user || $user['token'] !== $_SESSION['token']) {
-            $errorMsg = 'Session invalide. Veuillez vous reconnecter après avoir actualisé la page.';
-            SessionManager::destroy();
-            header("Location: injection.php?error=" . urlencode($errorMsg) . "#download");
-            exit;
-        }
-
-        // Vérifier le délai entre les téléchargements
-        if ($user['last_download'] !== null) {
-            $lastDownload = strtotime($user['last_download']);
-            $timeRemaining = DOWNLOAD_COOLDOWN - (time() - $lastDownload);
-
-            if ($timeRemaining > 0) {
-                throw new Exception('Merci d\'attendre ' . $timeRemaining . ' secondes avant de télécharger à nouveau.');
-            }
-        }
-
-        return $user['vip'] == 1;
+        return [
+            'url' => self::PUBLIC_URL,
+            'sha256' => hash_file('sha256', $path),
+            'size' => filesize($path),
+        ];
     }
 
-    public function serveFile()
+    public function serveFile(): void
     {
-        try {
-            // Vérification de la session
-            if (!SessionManager::checkTimeout()) {
-                throw new Exception('Session expirée');
-            }
-
-            // Déterminer le type d'utilisateur... et le fichier à servir
-            $isUiUser = $this->verifyAccess();
-
-            // Sélectionner le nom de fichier approprié
-
-            $filename = FILENAME;
-
-
-            // Construire le chemin complet
-            $downloadPath = DOWNLOAD_PATH . 'exe/' . $filename;
-            $contentType = 'application/exe';
-
-            // Vérifier l'existence du fichier
-            if (!file_exists($downloadPath)) {
-                throw new Exception(
-                    'Fichier non trouvé. Veuillez contacter les administrateurs pour signaler cette anomalie.'
-                    //. $downloadPath
-                );
-            }
-
-            // Mise à jour de la date du dernier téléchargement
-            $stmt = $this->db->prepare("UPDATE users SET last_download = CURRENT_TIMESTAMP WHERE id = ?");
-            $stmt->execute([$_SESSION['user_id']]);
-
-            // Désactiver la mise en mémoire tampon
-            if (ob_get_level()) {
-                ob_end_clean();
-            }
-
-            // Paramètres critiques pour les gros fichiers
-            set_time_limit(0);  // Désactive le timeout du script
-            ignore_user_abort(false); // Arrête le script si l'utilisateur annule
-
-            // En-têtes pour le téléchargement
-            header('Content-Type: ' . $contentType);
-            header('Content-Disposition: attachment; filename="' . $filename . '"');
-            header('Content-Length: ' . filesize($downloadPath));
-            header('Cache-Control: no-cache, no-store, must-revalidate');
-            header('Pragma: no-cache');
-            header('Expires: 0');
-
-            // Streaming optimisé avec contrôle de l'intégrité
-            $handle = fopen($downloadPath, 'rb');
-            if ($handle) {
-                $bytesToRead = filesize($downloadPath);
-                $bytesRead = 0;
-                $bufferSize = 1024 * 1024; // 1MB chunks
-
-                while (!feof($handle) && $bytesRead < $bytesToRead) {
-                    $buffer = fread($handle, $bufferSize);
-                    $bytesRead += strlen($buffer);
-                    echo $buffer;
-                    flush();
-                }
-
-                fclose($handle);
-            } else {
-                throw new Exception("Impossible d'ouvrir le fichier");
-            }
-
-            exit;
-        } catch (Exception $e) {
-            $_SESSION['error_message'] = $e->getMessage();
-            header("Location: injection.php#download");
-            exit;
+        $path = self::exePath();
+        if ($path === null) {
+            throw new Exception('Fichier non trouvé. Veuillez contacter les administrateurs pour signaler cette anomalie.');
         }
+
+        // Désactiver la mise en mémoire tampon
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+        set_time_limit(0);
+
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename(FILENAME) . '"');
+        header('Content-Length: ' . filesize($path));
+        header('X-Content-Type-Options: nosniff');
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        readfile($path);
+        exit;
     }
 }

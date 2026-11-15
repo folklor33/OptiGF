@@ -1,45 +1,33 @@
 <?php
-// Activer l'affichage des erreurs pour le débogage
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// download.exe.php
+//
+// Téléchargement public de l'exe du launcher : aucune connexion au site n'est requise
+// (lien du site et mise à jour automatique du launcher). Le compte OptiGF reste nécessaire dans l'application.
 
 require_once 'managers/config.php';
 require_once 'managers/SecureDownloadManager.php';
-require_once 'managers/SecurityManager.php';
 require_once 'managers/SystemManagers.php';
 
-SessionManager::start();
-
-// Vérifier que c'est bien une requête POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    error_log("ERREUR: Méthode non POST");
-    $_SESSION['error_message'] = 'Méthode de requête invalide.';
-    header("Location: injection.php#download");
-    exit;
-}
-
-// Vérifier que l'utilisateur est connecté
-if (!isset($_SESSION['user_id'])) {
-    error_log("ERREUR: Utilisateur non connecté");
-    $_SESSION['error_message'] = 'Vous devez être connecté pour télécharger.';
-    header("Location: index.php#account");
+if (!in_array($_SERVER['REQUEST_METHOD'], ['GET', 'POST'], true)) {
+    http_response_code(405);
+    header('Allow: GET, POST');
     exit;
 }
 
 try {
-    // Validation CSRF
-    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-        error_log("ERREUR: Token CSRF invalide");
-        throw new Exception('Token CSRF invalide. Veuillez actualiser la page.');
-    }
-    
-    // Lancer le téléchargement
-    $downloadManager = new SecureDownloadManager();
-    $downloadManager->serveFile();
-    
+    (new SecureDownloadManager())->serveFile();
 } catch (Exception $e) {
-    error_log("EXCEPTION: " . $e->getMessage());
-    error_log("TRACE: " . $e->getTraceAsString());
+    error_log("download.exe.php : " . $e->getMessage());
+
+    // Le launcher (mise à jour automatique) attend un code d'erreur, pas une redirection vers une page HTML
+    if (strpos($_SERVER['HTTP_USER_AGENT'] ?? '', 'OptiGF Launcher') === 0) {
+        http_response_code(404);
+        header('Content-Type: text/plain; charset=UTF-8');
+        echo $e->getMessage();
+        exit;
+    }
+
+    SessionManager::start();
     $_SESSION['error_message'] = $e->getMessage();
     header("Location: injection.php#download");
     exit;

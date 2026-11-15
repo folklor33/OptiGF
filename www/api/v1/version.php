@@ -22,6 +22,7 @@ header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
 header("Referrer-Policy: strict-origin-when-cross-origin");
 
 require_once '../../managers/config.php';
+require_once '../../managers/SecureDownloadManager.php';
 
 function sendJsonResponse(string $status, string $message, array $data = []): void
 {
@@ -52,5 +53,7 @@ sendJsonResponse("success", "Version check successful", [
         "is_up_to_date" => $versionStatus['is_up_to_date'],
         "user_version" => substr($userAgent, 0, 100)
     ],
-    "download_url" => $versionStatus['download_url']
+    "download_url" => $versionStatus['download_url'],
+    // Mise à jour automatique du launcher : exe public, vérifié par taille + SHA-256 (null si absent du serveur)
+    "exe" => SecureDownloadManager::exeInfo()
 ]);

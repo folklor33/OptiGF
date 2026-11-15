@@ -1,0 +1,11 @@
+{
+  "target": "data/db/c_parameter.ini",
+  "format": "csv",
+  "stage": "post",
+  "ops": [
+    { "op": "set", "id": "101", "cols": { "1": "5", "2": "delay pour anim afk mounts" } },
+    { "op": "set", "id": "102", "cols": { "1": "999999999", "2": "delay pour s assoir" } },
+    { "op": "set", "id": "463", "cols": { "1": "55", "2": "Couleur persos reincarnes" } },
+    { "op": "set", "id": "551", "cols": { "1": "60", "2": "BUFF_ICON temporaires" } }
+  ]
+}

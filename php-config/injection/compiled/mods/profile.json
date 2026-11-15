@@ -1,0 +1,132 @@
+{
+  "$comment": "Profil SERVI par l'API (mods/profile.json) : identique au profil par defaut embarque (mods-profile.json) + les options trimIdNewlines (T_Item : ID precede d'une ligne vide, ex. 16372) et appendMissing (T_PointAbility : ID du mod absent du vanilla, ex. 610). Le profil par defaut reste strictement celui des outils d'origine (test golden).",
+  "profileVersion": 1,
+  "c": {
+    "encoding": "big5-dbcs",
+    "files": {
+      "item": {
+        "path": "data/db/c_item.ini",
+        "header": "|V.16|93|"
+      },
+      "itemMall": {
+        "path": "data/db/c_itemmall.ini",
+        "header": "|V.16|93|"
+      },
+      "enchant": {
+        "path": "data/db/c_enchant.ini",
+        "header": "|V.10|63|"
+      },
+      "equipSet": {
+        "path": "data/db/c_equipset.ini",
+        "header": "|V.3|22|",
+        "inject": false
+      }
+    },
+    "itemColumns": {
+      "id": 0,
+      "icon": 1,
+      "model": 3,
+      "blank": [
+        9,
+        92
+      ],
+      "enchantRefs": [
+        69,
+        71,
+        72
+      ]
+    },
+    "equipSetColumns": {
+      "pairs": [
+        {
+          "itemId": 16,
+          "iconSource": 4
+        },
+        {
+          "itemId": 15,
+          "iconSource": 5
+        },
+        {
+          "itemId": 14,
+          "iconSource": 8
+        }
+      ],
+      "iconSourceLength": 5
+    },
+    "enchantColumns": {
+      "id": 0,
+      "icons": [
+        46,
+        1
+      ],
+      "blank": [
+        5,
+        59,
+        60,
+        61,
+        62
+      ]
+    },
+    "lists": {
+      "model": "Liste_Model.txt",
+      "item": "Liste_Item.txt",
+      "enchant": "Liste_Enchant.txt",
+      "genericIcons": "Liste_Icone.txt"
+    }
+  },
+  "t": {
+    "encoding": "bytes",
+    "languages": [
+      "fr"
+    ],
+    "files": [
+      {
+        "mod": "T_Dialogue.ini",
+        "path": "data/translate/{lang}/t_dialogue.ini",
+        "pipes": 2
+      },
+      {
+        "mod": "T_ElfCollect.ini",
+        "path": "data/translate/{lang}/t_elfcollect.ini",
+        "pipes": 3
+      },
+      {
+        "mod": "T_Enchant.ini",
+        "path": "data/translate/{lang}/t_enchant.ini",
+        "pipes": 5
+      },
+      {
+        "mod": "T_Item.ini",
+        "path": "data/translate/{lang}/t_item.ini",
+        "pipes": 3,
+        "trimIdNewlines": true
+      },
+      {
+        "mod": "T_Mall.ini",
+        "path": "data/translate/{lang}/t_itemmall.ini",
+        "pipes": 3
+      },
+      {
+        "mod": "T_Mission.ini",
+        "path": "data/translate/{lang}/t_mission.ini",
+        "pipes": 3
+      },
+      {
+        "mod": "T_Node.ini",
+        "path": "data/translate/{lang}/t_node.ini",
+        "pipes": 11
+      },
+      {
+        "mod": "T_PointAbility.ini",
+        "path": "data/translate/{lang}/t_pointability.ini",
+        "pipes": 2,
+        "appendMissing": true
+      },
+      {
+        "mod": "T_TextIndex.ini",
+        "path": "data/translate/{lang}/t_textindex.ini",
+        "pipes": 2
+      }
+    ]
+  }
+}

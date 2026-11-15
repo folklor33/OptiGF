@@ -1,0 +1,11 @@
+{
+  "target": "data/translate/fr/t_textindex.ini",
+  "format": "t",
+  "stage": "post",
+  "pipes": 2,
+  "ops": [
+    { "op": "set", "id": "9117", "cols": { "1": " ATQ %s2 > %s1" } },
+    { "op": "set", "id": "9271", "cols": { "1": " DEG %s3 > %s2 > %s1" } },
+    { "op": "set", "id": "11706", "cols": { "1": " ELF %s3 > %s2 (%s1)" } }
+  ]
+}

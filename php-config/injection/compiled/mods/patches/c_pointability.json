@@ -1,0 +1,8 @@
+{
+  "target": "data/db/c_pointability.ini",
+  "format": "c",
+  "stage": "post",
+  "ops": [
+    { "op": "upsert", "record": "610|Maitre Elite|5|8 14500:|17041|||", "after": "609" }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "target": "data/db/c_textlimit.ini",
+  "format": "c",
+  "stage": "post",
+  "ops": [
+    { "op": "keepOnly", "ids": ["1220"] },
+    { "op": "set", "id": "1220", "cols": { "1": "*" } }
+  ]
+}

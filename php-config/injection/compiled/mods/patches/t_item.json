@@ -1,0 +1,10 @@
+{
+  "target": "data/translate/fr/t_item.ini",
+  "format": "t",
+  "stage": "post",
+  "pipes": 3,
+  "ops": [
+    { "op": "set", "id": "18416", "cols": { "1": "b64:UGllcnJlIGRlIFJ1bmUgZJJhdXJvcmUgYm9y6WFsZSBtYWdpcXVl", "2": "b64:JDckqyBSZWdhcmRleiAhIEwnQXVyb3JlIGJvculhbGUgc2UgZOl2b2lsZXJhIHNvdXMgdm9zIHlldXgguw0KDQokMTIkTG9ycyBkZSBsJ2luY3J1c3RhdGlvbiwgZmFpdGVzIHVuIGNsaWMgZHJvaXQsIHB1aXMgZOlzaWduZXogbCdhcm11cmUg4CBlbXBsYWNlbWVudC4NCiQxMiRMZXMgZWZmZXRzIHNw6WNpYXV4IHZlcnRzIGRlcyBQaWVycmUgZGUgUnVuZSBwb3J0YW50IGxlIG3qbWUgbm9tIG5lIHBldXZlbnQgcGFzIHNlIGN1bXVsZXIgc3VyIHVuIG3qbWUgUGVyc29ubmFnZS4NCiQxMiRMb3JzcXVlIGxlcyBlZmZldHMgc3DpY2lhdXggYmxldXMgb2J0ZW51cyBhcHLocyByYWZmaW5hZ2Ugc29udCBwculzZW50cyBzdXIgdW4gbeptZSBQZXJzb25uYWdlLCBsYSB2YWxldXIgbGEgcGx1cyDpbGV26WUNCiQxMiQgcmVtcGxhY2UgbGEgcGx1cyBiYXNzZSBldCBuZSBwZXV0IHBhcyBzZSBjdW11bGVyLg==" } },
+    { "op": "set", "id": "25993", "cols": { "1": "b64:UGllcnJlIGRlIFJ1bmUgZGUgbGEgQ2h1dGUgZGUgbJJBc3RyZSBE6XZvcmFudA==", "2": "b64:JDckqyBJbmhhbGF0aW9uIGRlIHRvdXQgISC7DQoNCiQxMiRMb3JzIGRlIGwnaW5jcnVzdGF0aW9uLCBmYWl0ZXMgdW4gY2xpYyBkcm9pdCwgcHVpcyBk6XNpZ25leiBsZXMgQXJtZXMg4CBlbXBsYWNlbWVudC4NCiQxMiRMZXMgZWZmZXRzIHNw6WNpYXV4IHZlcnRzIGRlcyBQaWVycmUgZGUgUnVuZSBwb3J0YW50IGxlIG3qbWUgbm9tIG5lIHBldXZlbnQgcGFzIHNlIGN1bXVsZXIgc3VyIHVuIG3qbWUgUGVyc29ubmFnZS4NCiQxMiRMb3JzcXVlIGxlcyBlZmZldHMgc3DpY2lhdXggYmxldXMgb2J0ZW51cyBhcHLocyByYWZmaW5hZ2Ugc29udCBwculzZW50cyBzdXIgdW4gbeptZSBQZXJzb25uYWdlLCBsYSB2YWxldXIgbGEgcGx1cyDpbGV26WUNCiQxMiQgcmVtcGxhY2UgbGEgcGx1cyBiYXNzZSBldCBuZSBwZXV0IHBhcyBzZSBjdW11bGVyLg==" } }
+  ]
+}

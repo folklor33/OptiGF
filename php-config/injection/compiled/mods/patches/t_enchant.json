@@ -1,0 +1,11 @@
+{
+  "target": "data/translate/fr/t_enchant.ini",
+  "format": "t",
+  "stage": "post",
+  "pipes": 5,
+  "ops": [
+    { "op": "upsert", "record": "b64:OTQ1OTA0fEFtYW50IFRhcm90fFNldCA1IHBhcnRpZXM6IFRlbXBzIGRlIHJlY2hhcmdlIHJlc3RhbnQgc3VyIDNtaW4NCiogZWZmZXQgdmlzaWJsZSB1bmlxdWVtZW50IHBhciB2b3VzLW3qbWUNCiogY2hhbmdlciBkZSBjYW5hbCBy6WluaXRpYWxpc2UgbGUgdGVtcHMgZGUgcmVjaGFyZ2V8fHw=", "after": "45904" },
+    { "op": "upsert", "record": "b64:OTQ1OTA5fETpbW9uIFRhcm90fFNldCA1IHBhcnRpZXM6IFRlbXBzIGRlIHJlY2hhcmdlIHJlc3RhbnQgc3VyIDNtaW4NCiogZWZmZXQgdmlzaWJsZSB1bmlxdWVtZW50IHBhciB2b3VzLW3qbWUNCiogY2hhbmdlciBkZSBjYW5hbCBy6WluaXRpYWxpc2UgbGUgdGVtcHMgZGUgcmVjaGFyZ2V8fHw=", "after": "45909" },
+    { "op": "upsert", "record": "b64:OTQ1OTE0fEVybWl0ZSBUYXJvdHxTZXQgNSBwYXJ0aWVzOiBUZW1wcyBkZSByZWNoYXJnZSByZXN0YW50IHN1ciAzbWluDQoqIGVmZmV0IHZpc2libGUgdW5pcXVlbWVudCBwYXIgdm91cy1t6m1lDQoqIGNoYW5nZXIgZGUgY2FuYWwgculpbml0aWFsaXNlIGxlIHRlbXBzIGRlIHJlY2hhcmdlfHx8", "after": "45914" }
+  ]
+}

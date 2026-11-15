@@ -34,7 +34,7 @@ define('ENVIRONMENT', $env['app']['environment'] ?? 'development');
 // Version de l'application (correspond au User-Agent attendu)
 define('CURRENT_APP_VERSION', "OptiGF Launcher vb/v3.0.0");
 define('FILENAME', "OptiGF.exe");
-define('CURRENT_APP_SHA256', '6d853c3f6956930d0dafa07b56bf09e3af6a2e588f6ec9e3879895142908d504');
+define('CURRENT_APP_SHA256', '6a92e8efdbe2889c72c3e449979a40dd398a015add2c1e949ad811749867910a');
 // Empreinte SHA-256 de l'exe déposé dans DOWNLOAD_PATH/exe/FILENAME, affichée par build-protected.ps1 (avec les deux lignes ci-dessus).
 // Vide ou différente du fichier déposé : pas de mise à jour automatique, et download.exe.php refuse de servir un fichier différent.
 // Un launcher dont l'empreinte est égale à celle-ci se considère à jour, quelle que soit CURRENT_APP_VERSION (pas de boucle).

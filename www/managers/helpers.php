@@ -32,7 +32,7 @@ function src($path) {
 
 
 /**
- * Compare la version du Launcher OptiGF (User-Agent "OptiGF Launcher C#/v1.4") à celle attendue par le serveur
+ * Compare la version du Launcher OptiGF (User-Agent "OptiGF Launcher vb/v1.4") à celle attendue par le serveur
  * (CURRENT_APP_VERSION). Une version plus récente que celle du serveur n'est pas considérée comme périmée.
  * @param string $userAgent User-Agent de la requête
  * @return array ['is_launcher' => bool, 'client' => string, 'latest' => string, 'is_up_to_date' => bool, 'download_url' => string]

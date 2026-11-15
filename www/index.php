@@ -496,7 +496,7 @@ if (isset($_GET['logout']) && $isUserLoggedIn) {
                     <h5>Staff OptiGF:</h5>
                     <ul class="mb-0">
                         <li><strong>Bulle</strong> <span>@folklor</span> <em> > Conception - Icons CO Design
-                                - Hébergement - Développement: website/db/c#app</em></li>
+                                - Hébergement - Développement: website/db/vb_app</em></li>
                         <li><strong>Kirito</strong> <span>@artzz_gi</span> <em> > Beta tester - Icons Creations</em>
                         </li>
                     </ul>

@@ -32,17 +32,17 @@ define('ENVIRONMENT', $env['app']['environment'] ?? 'development');
 // À mettre à jour manuellement lors de nouvelles releases
 
 // Version de l'application (correspond au User-Agent attendu)
-define('CURRENT_APP_VERSION', "OptiGF Launcher vb/v3.0");
-define('FILENAME', "OptiGF.exe");
+define('CURRENT_APP_VERSION', "OptiGF Launcher vb/v3.0.0");
+define('FILENAME', "OptiGF1.exe");
+define('CURRENT_APP_SHA256', 'ad71ed0c3d6b10dae5e831763d9426b74481a82bb5df9cd2bc4f5abb7a1d6704');
 // Empreinte SHA-256 de l'exe déposé dans DOWNLOAD_PATH/exe/FILENAME, affichée par build-protected.ps1 (avec les deux lignes ci-dessus).
 // Vide ou différente du fichier déposé : pas de mise à jour automatique, et download.exe.php refuse de servir un fichier différent.
 // Un launcher dont l'empreinte est égale à celle-ci se considère à jour, quelle que soit CURRENT_APP_VERSION (pas de boucle).
-define('CURRENT_APP_SHA256', '');
 
 // ZIP d'injection (icônes, polices, GF_61Hz... : ressources non reconstruites par le launcher), servi par download.php
 // sous le nom injection/<variant>/<version>.zip. Format AAAAMMJJxx = date d'ajout du ZIP. Indépendant de CURRENT_MODS_COMPILED :
 // pour publier un nouveau ZIP, le déposer sous un nouveau nom puis changer cette valeur.
-define('CURRENT_INJECTION_ZIP_COMPILED', '2026110301');
+define('CURRENT_INJECTION_ZIP_COMPILED', '2026110304');
 define('CURRENT_INJECTION_ZIP_UNCOMPILED', 'none');
 
 // Version des modifications servies par le type "mods" (listes, traductions, patchs ; format AAAAMMJJxx).

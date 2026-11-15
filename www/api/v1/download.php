@@ -288,13 +288,17 @@ function listDataFiles(string $root): array
     return $files;
 }
 
-// Chemins acceptés dans data/manifest.txt (relatifs au dossier du jeu, sans remontée de dossier)
+// Chemins acceptés dans data/manifest.txt (relatifs au dossier du jeu, sans remontée de dossier) :
+// un fichier (UI/itemicon/A10436.dds) ou un dossier terminé par "/" (UI/loadingframe/)
 const NEW_FILE_PATTERN = '#^[a-z0-9_\-]+(/[a-z0-9_.\-]+)*\.[a-z0-9]{1,8}$#i';
+const NEW_FOLDER_PATTERN = '#^[a-z0-9_\-]+(/[a-z0-9_.\-]+)*/$#i';
 
 /**
  * Fichiers à injecter dans les archives du jeu en plus des .ini : data/manifest.txt, un chemin relatif au dossier
  * du jeu par ligne (ex. UI\itemicon\A10436.dds). Ces fichiers sont livrés par le ZIP d'injection : l'API ne renvoie
  * que la liste, le launcher décide lui-même s'il remplace une entrée de pkg.idx ou s'il en ajoute une.
+ * Une ligne terminée par "/" (ex. UI\loadingframe\) désigne tous les fichiers du ZIP sous ce dossier (à sa place ou sous
+ * .injection_data/) : c'est le launcher qui la développe à partir du ZIP.
  * @return string[] chemins (séparateur "/", casse d'origine, sans doublon)
  */
 function listNewFileNames(string $root): array
@@ -312,7 +316,7 @@ function listNewFileNames(string $root): array
         }
 
         $name = ltrim(str_replace('\\', '/', $line), '/');
-        if (strpos($name, '..') !== false || !preg_match(NEW_FILE_PATTERN, $name)) {
+        if (strpos($name, '..') !== false || (!preg_match(NEW_FILE_PATTERN, $name) && !preg_match(NEW_FOLDER_PATTERN, $name))) {
             error_log("manifest.txt : chemin ignoré : " . $line);
             continue;
         }

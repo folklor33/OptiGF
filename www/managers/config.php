@@ -42,7 +42,7 @@ define('CURRENT_APP_SHA256', '736a0bc500a1479e74697c44a8627e6eb2ad7f1256f27c4c01
 // ZIP d'injection (icônes, polices, GF_61Hz... : ressources non reconstruites par le launcher), servi par download.php
 // sous le nom injection/<variant>/<version>.zip. Format AAAAMMJJxx = date d'ajout du ZIP. Indépendant de CURRENT_MODS_COMPILED :
 // pour publier un nouveau ZIP, le déposer sous un nouveau nom puis changer cette valeur.
-define('CURRENT_INJECTION_ZIP_COMPILED', '2026110305');
+define('CURRENT_INJECTION_ZIP_COMPILED', '2026110306');
 define('CURRENT_INJECTION_ZIP_UNCOMPILED', 'none');
 
 // Version des modifications servies par le type "mods" (listes, traductions, patchs ; format AAAAMMJJxx).

@@ -10,7 +10,7 @@ UI/skillicon/
 # Ressources compilees
 UI/loadingframe/
 UI/map/
-map/model/S099/S099.fsm
+map/model/S099/
 
 # Modeles et textures
 item/model/

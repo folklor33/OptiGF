@@ -32,9 +32,9 @@ define('ENVIRONMENT', $env['app']['environment'] ?? 'development');
 // À mettre à jour manuellement lors de nouvelles releases
 
 // Version de l'application (correspond au User-Agent attendu)
-define('CURRENT_APP_VERSION', "OptiGF Launcher vb/v3.0.0");
+define('CURRENT_APP_VERSION', "OptiGF Launcher vb/v3.1.0");
 define('FILENAME', "OptiGF.exe");
-define('CURRENT_APP_SHA256', '565b0b6b438a389eee0272e348e0abfa616b96a5aa97df15258deb6199afc35b');
+define('CURRENT_APP_SHA256', '736a0bc500a1479e74697c44a8627e6eb2ad7f1256f27c4c01d4e67336258ce6');
 // Empreinte SHA-256 de l'exe déposé dans DOWNLOAD_PATH/exe/FILENAME, affichée par build-protected.ps1 (avec les deux lignes ci-dessus).
 // Vide ou différente du fichier déposé : pas de mise à jour automatique, et download.exe.php refuse de servir un fichier différent.
 // Un launcher dont l'empreinte est égale à celle-ci se considère à jour, quelle que soit CURRENT_APP_VERSION (pas de boucle).
@@ -42,7 +42,7 @@ define('CURRENT_APP_SHA256', '565b0b6b438a389eee0272e348e0abfa616b96a5aa97df1525
 // ZIP d'injection (icônes, polices, GF_61Hz... : ressources non reconstruites par le launcher), servi par download.php
 // sous le nom injection/<variant>/<version>.zip. Format AAAAMMJJxx = date d'ajout du ZIP. Indépendant de CURRENT_MODS_COMPILED :
 // pour publier un nouveau ZIP, le déposer sous un nouveau nom puis changer cette valeur.
-define('CURRENT_INJECTION_ZIP_COMPILED', '2026110304');
+define('CURRENT_INJECTION_ZIP_COMPILED', '2026110305');
 define('CURRENT_INJECTION_ZIP_UNCOMPILED', 'none');
 
 // Version des modifications servies par le type "mods" (listes, traductions, patchs ; format AAAAMMJJxx).
@@ -52,8 +52,8 @@ define('CURRENT_MODS_COMPILED', '2026111501');
 
 // ZIP des UI (ui/<variant>/<version>.zip), même principe que les ZIP d'injection
 define('CURRENT_UI_TRAPWORLD', '0000000000');
-define('CURRENT_UI_VANILLA', '0000000000');
-define('CURRENT_UI_VLIK', '0000000000');
+define('CURRENT_UI_VANILLA', '2026092401');
+define('CURRENT_UI_VLIK', '2026092401');
 
 // Détection automatique du chemin de base pour les URLs
 // En production: "/" | En dev avec sous-dossier: "/www/"
